@@ -2,13 +2,13 @@ import { AbsoluteFill, useVideoConfig } from "remotion";
 import { TitleStripSilk } from "@/remotion/TitleStripSilk";
 
 /** Shared metadata for Player + renderMediaOnWeb */
-/** 20s at 30fps */
 export const POC_COMPOSITION = {
   id: "poc-composition",
   width: 1920,
   height: 1080,
   fps: 30,
-  durationInFrames: 600,
+  /** Silk uses `phase = 2π·frame/duration` → seamless loop for any duration ≥ 1. */
+  durationInFrames: 300,
 } as const;
 
 /** Tailwind `zinc-50` */

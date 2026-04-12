@@ -32,9 +32,8 @@ precision mediump float;
 varying vec2 vUv;
 varying vec3 vPosition;
 
-uniform float uTime;
+uniform float uPhi;
 uniform vec3  uColor;
-uniform float uSpeed;
 uniform float uScale;
 uniform float uRotation;
 uniform float uNoiseIntensity;
@@ -58,16 +57,14 @@ void main() {
   float rnd        = noise(gl_FragCoord.xy);
   vec2  uv         = rotateUvs(vUv * uScale, uRotation);
   vec2  tex        = uv * uScale;
-  float tOffset    = uSpeed * uTime;
+  float phi        = uPhi;
 
-  tex.y += 0.038 * sin(8.0 * tex.x - tOffset);
-  tex.x += 0.028 * sin(7.0 * tex.y + 0.55 * tOffset);
+  tex.y += 0.038 * sin(8.0 * tex.x - phi);
+  tex.x += 0.028 * sin(7.0 * tex.y + phi);
 
-  float pattern = 0.6 +
-                  0.4 * sin(5.0 * (tex.x + tex.y +
-                                   cos(3.0 * tex.x + 5.0 * tex.y) +
-                                   0.03 * tOffset) +
-                           sin(20.0 * (tex.x + tex.y - 0.14 * tOffset)));
+  float inner = 5.0 * (tex.x + tex.y + cos(3.0 * tex.x + 5.0 * tex.y)) +
+                sin(20.0 * (tex.x + tex.y));
+  float pattern = 0.6 + 0.4 * sin(inner + phi);
 
   vec4 col = vec4(uColor, 1.0) * vec4(pattern) - rnd / 15.0 * uNoiseIntensity;
   col.a = 1.0;
@@ -117,9 +114,8 @@ type GlResources = {
   gl: WebGLRenderingContext;
   program: WebGLProgram;
   buffer: WebGLBuffer;
-  uTime: WebGLUniformLocation | null;
+  uPhi: WebGLUniformLocation | null;
   uColor: WebGLUniformLocation | null;
-  uSpeed: WebGLUniformLocation | null;
   uScale: WebGLUniformLocation | null;
   uRotation: WebGLUniformLocation | null;
   uNoiseIntensity: WebGLUniformLocation | null;
@@ -147,9 +143,8 @@ function initGlResources(canvas: HTMLCanvasElement): GlResources | null {
   if (!program) return null;
 
   const aPosition = gl.getAttribLocation(program, "a_position");
-  const uTime = gl.getUniformLocation(program, "uTime");
+  const uPhi = gl.getUniformLocation(program, "uPhi");
   const uColor = gl.getUniformLocation(program, "uColor");
-  const uSpeed = gl.getUniformLocation(program, "uSpeed");
   const uScale = gl.getUniformLocation(program, "uScale");
   const uRotation = gl.getUniformLocation(program, "uRotation");
   const uNoiseIntensity = gl.getUniformLocation(program, "uNoiseIntensity");
@@ -171,9 +166,8 @@ function initGlResources(canvas: HTMLCanvasElement): GlResources | null {
     gl,
     program,
     buffer,
-    uTime,
+    uPhi,
     uColor,
-    uSpeed,
     uScale,
     uRotation,
     uNoiseIntensity,
@@ -181,6 +175,20 @@ function initGlResources(canvas: HTMLCanvasElement): GlResources | null {
 }
 
 const E = Math.E;
+
+/**
+ * Phase [0, 2π] over the composition: first and last frames are the same point on the circle
+ * (φ = 2π ≡ 0), so every `sin(· ± φ)` in the shader loops with zero seam.
+ */
+function silkPhi(frame: number, durationInFrames: number): number {
+  const n = Math.max(1, durationInFrames);
+  if (n === 1) return 0;
+  return (frame / (n - 1)) * (2 * Math.PI);
+}
+
+function silkRotation(phi: number): number {
+  return 0.12 + 0.04 * Math.sin(phi);
+}
 
 function fract(x: number): number {
   return x - Math.floor(x);
@@ -215,19 +223,17 @@ function drawSilkCpu(
   bw: number,
   bh: number,
   frame: number,
-  fps: number,
   gridCellPx: number,
+  durationInFrames: number,
 ): void {
   const ctx = canvas.getContext("2d", { alpha: false });
   if (!ctx) return;
 
   const img = ctx.createImageData(bw, bh);
-  const uTimeVal = (0.1 * frame) / fps;
+  const phi = silkPhi(frame, durationInFrames);
   const uScale = 0.85 + Math.min(0.35, gridCellPx / 72) * 0.25;
-  const uRotation = 0.12 + 0.04 * Math.sin(uTimeVal * 0.65);
+  const uRotation = silkRotation(phi);
   const uNoiseIntensity = 1.1;
-  const uSpeed = 6.5;
-  const tOffset = uSpeed * uTimeVal;
   const [cr, cg, cb] = SILK_TINT_RGB;
 
   for (let iy = 0; iy < bh; iy++) {
@@ -245,20 +251,13 @@ function drawSilkCpu(
       const uv = rotateUvs(scaledX, scaledY, uRotation);
       let texX = uv.x * uScale;
       let texY = uv.y * uScale;
-      texY += 0.038 * Math.sin(8.0 * texX - tOffset);
-      texX += 0.028 * Math.sin(7.0 * texY + 0.55 * tOffset);
+      texY += 0.038 * Math.sin(8.0 * texX - phi);
+      texX += 0.028 * Math.sin(7.0 * texY + phi);
 
-      const pattern =
-        0.6 +
-        0.4 *
-          Math.sin(
-            5.0 *
-              (texX +
-                texY +
-                Math.cos(3.0 * texX + 5.0 * texY) +
-                0.03 * tOffset) +
-              Math.sin(20.0 * (texX + texY - 0.14 * tOffset)),
-          );
+      const inner =
+        5.0 * (texX + texY + Math.cos(3.0 * texX + 5.0 * texY)) +
+        Math.sin(20.0 * (texX + texY));
+      const pattern = 0.6 + 0.4 * Math.sin(inner + phi);
 
       let r = cr * pattern - (rnd / 15.0) * uNoiseIntensity;
       let g = cg * pattern - (rnd / 15.0) * uNoiseIntensity;
@@ -295,7 +294,7 @@ export function TitleStripSilk({
   readonly visibleOpacity?: number;
 }) {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { durationInFrames } = useVideoConfig();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const glRef = useRef<GlResources | null>(null);
   const { delayRender, continueRender } = useDelayRender();
@@ -329,9 +328,8 @@ export function TitleStripSilk({
         const {
           gl,
           program,
-          uTime,
+          uPhi,
           uColor,
-          uSpeed,
           uScale,
           uRotation,
           uNoiseIntensity,
@@ -339,11 +337,11 @@ export function TitleStripSilk({
         gl.viewport(0, 0, canvas.width, canvas.height);
         gl.useProgram(program);
 
-        const uTimeVal = (0.1 * frame) / fps;
+        const phi = silkPhi(frame, durationInFrames);
         const scale = 0.85 + Math.min(0.35, gridCellPx / 72) * 0.25;
-        const rotation = 0.12 + 0.04 * Math.sin(uTimeVal * 0.65);
+        const rotation = silkRotation(phi);
 
-        if (uTime) gl.uniform1f(uTime, uTimeVal);
+        if (uPhi) gl.uniform1f(uPhi, phi);
         if (uColor)
           gl.uniform3f(
             uColor,
@@ -351,7 +349,6 @@ export function TitleStripSilk({
             SILK_TINT_RGB[1],
             SILK_TINT_RGB[2],
           );
-        if (uSpeed) gl.uniform1f(uSpeed, 6.5);
         if (uScale) gl.uniform1f(uScale, scale);
         if (uRotation) gl.uniform1f(uRotation, rotation);
         if (uNoiseIntensity) gl.uniform1f(uNoiseIntensity, 1.1);
@@ -360,12 +357,20 @@ export function TitleStripSilk({
         gl.clear(gl.COLOR_BUFFER_BIT);
         gl.drawArrays(gl.TRIANGLES, 0, 6);
       } else {
-        drawSilkCpu(canvas, bw, bh, frame, fps, gridCellPx);
+        drawSilkCpu(canvas, bw, bh, frame, gridCellPx, durationInFrames);
       }
     } finally {
       continueRender(handle);
     }
-  }, [continueRender, frame, fps, gridCellPx, heightPx, handle, widthPx]);
+  }, [
+    continueRender,
+    durationInFrames,
+    frame,
+    gridCellPx,
+    heightPx,
+    handle,
+    widthPx,
+  ]);
 
   useEffect(() => {
     return () => {
