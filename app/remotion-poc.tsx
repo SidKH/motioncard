@@ -15,13 +15,18 @@ export function RemotionPoc() {
   const [error, setError] = useState<string | null>(null);
   const [isRendering, setIsRendering] = useState(false);
   const [lastVideoUrl, setLastVideoUrl] = useState<string | null>(null);
+  const [copyFeedback, setCopyFeedback] = useState<"idle" | "copied" | "error">(
+    "idle",
+  );
   const lastVideoBlobUrlRef = useRef<string | null>(null);
+  const lastVideoBlobRef = useRef<Blob | null>(null);
 
   const revokeLastUrl = useCallback(() => {
     if (lastVideoBlobUrlRef.current) {
       URL.revokeObjectURL(lastVideoBlobUrlRef.current);
       lastVideoBlobUrlRef.current = null;
     }
+    lastVideoBlobRef.current = null;
     setLastVideoUrl(null);
   }, []);
 
@@ -34,8 +39,27 @@ export function RemotionPoc() {
     };
   }, []);
 
+  const handleCopyVideo = useCallback(async () => {
+    const blob = lastVideoBlobRef.current;
+    if (!blob) return;
+    try {
+      const type = blob.type || "video/mp4";
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          [type]: blob,
+        }),
+      ]);
+      setCopyFeedback("copied");
+      window.setTimeout(() => setCopyFeedback("idle"), 2000);
+    } catch {
+      setCopyFeedback("error");
+      window.setTimeout(() => setCopyFeedback("idle"), 2500);
+    }
+  }, []);
+
   const handleRender = async () => {
     setError(null);
+    setCopyFeedback("idle");
     revokeLastUrl();
     setProgress(0);
     setIsRendering(true);
@@ -55,6 +79,7 @@ export function RemotionPoc() {
         onProgress: ({ progress: p }) => setProgress(p),
       });
       const blob = await getBlob();
+      lastVideoBlobRef.current = blob;
       const url = URL.createObjectURL(blob);
       lastVideoBlobUrlRef.current = url;
       setLastVideoUrl(url);
@@ -146,13 +171,26 @@ export function RemotionPoc() {
               src={lastVideoUrl}
               controls
             />
-            <a
-              href={lastVideoUrl}
-              download="remotion-poc.mp4"
-              className="inline-flex w-fit text-sm font-medium text-orange-600 underline-offset-4 hover:underline dark:text-orange-400"
-            >
-              Download MP4
-            </a>
+            <div className="flex flex-wrap items-center gap-4">
+              <button
+                type="button"
+                onClick={handleCopyVideo}
+                className="inline-flex w-fit text-sm font-medium text-orange-600 underline-offset-4 hover:underline dark:text-orange-400"
+              >
+                {copyFeedback === "copied"
+                  ? "Copied to clipboard"
+                  : copyFeedback === "error"
+                    ? "Copy not supported"
+                    : "Copy"}
+              </button>
+              <a
+                href={lastVideoUrl}
+                download="remotion-poc.mp4"
+                className="inline-flex w-fit text-sm font-medium text-orange-600 underline-offset-4 hover:underline dark:text-orange-400"
+              >
+                Download MP4
+              </a>
+            </div>
           </div>
         )}
       </div>
