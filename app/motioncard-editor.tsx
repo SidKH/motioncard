@@ -1,7 +1,7 @@
 "use client";
 
 import { renderMediaOnWeb } from "@remotion/web-renderer";
-import { ALargeSmall } from "lucide-react";
+import { ALargeSmall, RotateCcw } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { MotioncardPreview } from "@/app/motioncard-preview";
 import { Button } from "@/components/ui/button";
@@ -47,6 +47,11 @@ export function MotioncardEditor() {
     setLastVideoUrl(null);
     setLastVideoBytes(null);
   }, []);
+
+  const handleClearRenderedVideo = useCallback(() => {
+    setError(null);
+    revokeLastUrl();
+  }, [revokeLastUrl]);
 
   useEffect(() => {
     return () => {
@@ -159,29 +164,53 @@ export function MotioncardEditor() {
                   </div>
                 </div>
               </div>
-              <div className="flex w-full shrink-0 items-center justify-stretch sm:ml-auto sm:w-auto sm:justify-end">
+              <div className="flex w-full shrink-0 items-center justify-stretch gap-2 sm:ml-auto sm:w-auto sm:justify-end">
                 {lastVideoUrl && !isRendering ? (
-                  <Button
-                    asChild
-                    className="min-w-44 w-full justify-center sm:w-auto"
-                  >
-                    <a href={lastVideoUrl} download="motioncard.mp4">
-                      Download
-                      {lastVideoBytes !== null
-                        ? ` (${formatMegabytes(lastVideoBytes)})`
-                        : null}
-                    </a>
-                  </Button>
+                  <>
+                    <Button
+                      asChild
+                      className="min-w-0 flex-1 justify-center sm:min-w-44 sm:w-auto sm:flex-initial"
+                    >
+                      <a href={lastVideoUrl} download="motioncard.mp4">
+                        Download
+                        {lastVideoBytes !== null
+                          ? ` (${formatMegabytes(lastVideoBytes)})`
+                          : null}
+                      </a>
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      className="shrink-0"
+                      onClick={handleClearRenderedVideo}
+                      aria-label="Clear rendered video"
+                      title="Clear rendered video"
+                    >
+                      <RotateCcw />
+                    </Button>
+                  </>
                 ) : (
                   <Button
                     type="button"
                     className="w-full min-w-44 justify-center sm:w-44"
                     onClick={handleRender}
                     disabled={isRendering}
+                    aria-busy={isRendering}
                   >
-                    {isRendering
-                      ? `Rendering ${renderProgress !== null ? Math.round(renderProgress * 100) : 0}%`
-                      : "Render video"}
+                    {isRendering ? (
+                      <>
+                        Rendering{" "}
+                        <span className="tabular-nums">
+                          {renderProgress !== null
+                            ? Math.round(renderProgress * 100)
+                            : 0}
+                          %
+                        </span>
+                      </>
+                    ) : (
+                      "Render video"
+                    )}
                   </Button>
                 )}
               </div>
