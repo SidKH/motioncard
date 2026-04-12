@@ -84,12 +84,15 @@ export function RemotionPoc() {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex min-h-0 flex-1 items-center justify-center px-6 py-6">
-        <div className="w-full max-w-2xl">
+        <div className="flex w-full max-w-2xl flex-col gap-6">
           <PocPreviewWithOverlay
             text={text}
             onTextChange={setText}
             fontSizeProgress={fontSizeProgress}
           />
+          <p className="text-center text-sm text-zinc-500">
+            Your message on animated backgrounds
+          </p>
         </div>
       </div>
 
