@@ -13,8 +13,20 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Project X",
-  description: "Remotion Player preview and browser-side video render",
+  title: "Motion Card",
+  description:
+    "Write short text on beautiful backgrounds, export, and share anywhere.",
+  openGraph: {
+    title: "Motion Card",
+    description:
+      "Write short text on beautiful backgrounds, export, and share anywhere.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Motion Card",
+    description:
+      "Write short text on beautiful backgrounds, export, and share anywhere.",
+  },
 };
 
 export default function RootLayout({
