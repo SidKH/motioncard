@@ -16,17 +16,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Motioncard",
+  title: "motioncard",
   description:
     "Write short text on beautiful backgrounds, export, and share anywhere.",
   openGraph: {
-    title: "Motioncard",
+    title: "motioncard",
     description:
       "Write short text on beautiful backgrounds, export, and share anywhere.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Motioncard",
+    title: "motioncard",
     description:
       "Write short text on beautiful backgrounds, export, and share anywhere.",
   },

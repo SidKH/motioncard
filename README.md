@@ -1,6 +1,6 @@
-# Motioncard
+# motioncard
 
-**Motioncard** helps you write short text on beautiful animated backgrounds, export it, and share it anywhere—social feeds, stories, or messengers—without tying you to a single platform.
+**motioncard** helps you write short text on beautiful animated backgrounds, export it, and share it anywhere—social feeds, stories, or messengers—without tying you to a single platform.
 
 ## Development
 

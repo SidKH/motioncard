@@ -7,7 +7,7 @@ export default function Home() {
       <header className="border-b border-border">
         <div className="flex h-14 w-full items-center gap-2 px-6">
           <MotionCardLogo className="size-4 shrink-0 text-foreground" />
-          <span className="text-sm font-medium text-foreground">Motioncard</span>
+          <span className="text-sm font-medium text-foreground">motioncard</span>
         </div>
       </header>
       <MotioncardEditor />
