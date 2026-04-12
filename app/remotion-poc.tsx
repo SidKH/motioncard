@@ -11,6 +11,7 @@ import {
   POC_COMPOSITION_DEFAULT_PROPS,
   PocComposition,
 } from "@/remotion/composition";
+import { cn } from "@/lib/utils";
 
 function formatMegabytes(bytes: number): string {
   const mb = bytes / (1024 * 1024);
@@ -104,15 +105,22 @@ export function RemotionPoc() {
                 >
                   <ALargeSmall className="size-4" />
                 </span>
-                <Slider
-                  value={[fontSizeProgress]}
-                  onValueChange={(v) => setFontSizeProgress(v[0] ?? 50)}
-                  min={0}
-                  max={100}
-                  step={1}
-                  className="min-w-0 flex-1"
-                  aria-label="Font size"
-                />
+                <div
+                  className={cn(
+                    "min-w-0 flex-1",
+                    "[&_[data-slot=slider-range]]:!bg-zinc-300 dark:[&_[data-slot=slider-range]]:!bg-zinc-500",
+                  )}
+                >
+                  <Slider
+                    value={[fontSizeProgress]}
+                    onValueChange={(v) => setFontSizeProgress(v[0] ?? 50)}
+                    min={0}
+                    max={100}
+                    step={1}
+                    className="w-full"
+                    aria-label="Font size"
+                  />
+                </div>
               </div>
               <div className="flex shrink-0 items-center gap-2">
                 {lastVideoUrl && !isRendering ? (
