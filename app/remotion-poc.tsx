@@ -70,26 +70,9 @@ export function RemotionPoc() {
 
   return (
     <div className="flex w-full max-w-2xl flex-col gap-8">
-      <div>
-        <h2 className="text-lg font-semibold text-foreground">
-          Preview
-        </h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Remotion Player (same composition as client-side render). Click the
-          preview and type to edit on-screen text.
-        </p>
-        <PocPreviewWithOverlay text={text} onTextChange={setText} />
-      </div>
+      <PocPreviewWithOverlay text={text} onTextChange={setText} />
 
       <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold text-foreground">
-          Client-side render
-        </h2>
-        <p className="text-sm text-muted-foreground">
-          Uses <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">renderMediaOnWeb</code>{" "}
-          from <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">@remotion/web-renderer</code>
-          . Requires WebCodecs (Chrome 94+, Firefox 130+, Safari 26+).
-        </p>
         <div className="flex flex-wrap items-center gap-3">
           <button
             type="button"
