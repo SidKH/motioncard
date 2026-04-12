@@ -5,15 +5,15 @@ import {
 } from "remotion";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
-/** Tailwind zinc-800 — dim highlight so the pillar stays subtle. */
-const ZINC_TOP_RGB: readonly [number, number, number] = [
+/** Muted gray top tint — dim highlight so the smoke column stays subtle. */
+const DEFAULT_TOP_RGB: readonly [number, number, number] = [
   39 / 255,
   39 / 255,
   42 / 255,
 ];
 
 /** Black — base stays as dark as possible. */
-const ZINC_BOTTOM_RGB: readonly [number, number, number] = [0, 0, 0];
+const DEFAULT_BOTTOM_RGB: readonly [number, number, number] = [0, 0, 0];
 
 const STEP_MULT = 1.12;
 const MAX_ITER = 56;
@@ -303,8 +303,8 @@ function drawPillarCpuFallback(
   const shift = 0.04 * Math.sin(phase);
   /** Bottom-left → top-right (canvas y grows downward). */
   const g = ctx.createLinearGradient(0, bh, bw, 0);
-  const [tr, tg, tb] = ZINC_TOP_RGB;
-  const [br, bg, bb] = ZINC_BOTTOM_RGB;
+  const [tr, tg, tb] = DEFAULT_TOP_RGB;
+  const [br, bg, bb] = DEFAULT_BOTTOM_RGB;
   g.addColorStop(
     Math.min(1, Math.max(0, 0.35 + shift)),
     `rgb(${Math.round(br * 255)}, ${Math.round(bg * 255)}, ${Math.round(bb * 255)})`,
@@ -321,12 +321,12 @@ const WAVE_ANGLE = 0.4;
 /** Extra swirl so the column reads less like a rigid beam and more like drifting smoke. */
 const WAVE_ANGLE_WOBBLE = 0.22;
 
-export function ZincLightPillar({
+export function SmokePillar({
   widthPx,
   heightPx,
   visibleOpacity = 1,
-  topRgb = ZINC_TOP_RGB,
-  bottomRgb = ZINC_BOTTOM_RGB,
+  topRgb = DEFAULT_TOP_RGB,
+  bottomRgb = DEFAULT_BOTTOM_RGB,
   intensity = 0.68,
   glowAmount = 0.0042,
   pillarWidth = 3.6,

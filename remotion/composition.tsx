@@ -1,6 +1,6 @@
 import { AbsoluteFill, useVideoConfig } from "remotion";
 import { TitleStripSilk } from "@/remotion/TitleStripSilk";
-import { ZincLightPillar } from "@/remotion/ZincLightPillar";
+import { SmokePillar } from "@/remotion/SmokePillar";
 import {
   getPocTitleFontSizePx,
   getPocTitlePaddingPx,
@@ -57,7 +57,7 @@ export function PocComposition({
       }}
     >
       {background === "smoke" ? (
-        <ZincLightPillar widthPx={width} heightPx={height} />
+        <SmokePillar widthPx={width} heightPx={height} />
       ) : (
         <TitleStripSilk gridCellPx={72} widthPx={width} heightPx={height} />
       )}
