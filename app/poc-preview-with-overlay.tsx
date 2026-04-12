@@ -70,7 +70,7 @@ export function PocPreviewWithOverlay({
   return (
     <div
       ref={wrapRef}
-      className="relative mt-4 overflow-hidden rounded-lg border border-zinc-200 bg-black shadow-sm dark:border-zinc-800"
+      className="relative mt-4 overflow-hidden rounded-lg border border-border bg-media-canvas shadow-sm"
     >
       <Player
         component={PocComposition}
@@ -102,7 +102,7 @@ export function PocPreviewWithOverlay({
           autoComplete="off"
           aria-label="On-screen text"
           rows={1}
-          className="pointer-events-auto min-h-0 w-full max-w-full resize-none overflow-y-auto border-0 bg-transparent text-center outline-none ring-0 placeholder:text-zinc-500/40 focus:ring-0 dark:placeholder:text-zinc-500/40"
+          className="pointer-events-auto min-h-0 w-full max-w-full resize-none overflow-y-auto border-0 bg-transparent text-center outline-none ring-0 placeholder:text-muted-foreground/40 focus:ring-0"
           style={{
             color: POC_TITLE_COLOR,
             caretColor: POC_TITLE_COLOR,

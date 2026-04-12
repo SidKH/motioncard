@@ -71,10 +71,10 @@ export function RemotionPoc() {
   return (
     <div className="flex w-full max-w-2xl flex-col gap-8">
       <div>
-        <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+        <h2 className="text-lg font-semibold text-foreground">
           Preview
         </h2>
-        <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+        <p className="mt-1 text-sm text-muted-foreground">
           Remotion Player (same composition as client-side render). Click the
           preview and type to edit on-screen text.
         </p>
@@ -82,12 +82,12 @@ export function RemotionPoc() {
       </div>
 
       <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+        <h2 className="text-lg font-semibold text-foreground">
           Client-side render
         </h2>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          Uses <code className="rounded bg-zinc-100 px-1 py-0.5 font-mono text-xs dark:bg-zinc-800">renderMediaOnWeb</code>{" "}
-          from <code className="rounded bg-zinc-100 px-1 py-0.5 font-mono text-xs dark:bg-zinc-800">@remotion/web-renderer</code>
+        <p className="text-sm text-muted-foreground">
+          Uses <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">renderMediaOnWeb</code>{" "}
+          from <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">@remotion/web-renderer</code>
           . Requires WebCodecs (Chrome 94+, Firefox 130+, Safari 26+).
         </p>
         <div className="flex flex-wrap items-center gap-3">
@@ -95,35 +95,35 @@ export function RemotionPoc() {
             type="button"
             onClick={handleRender}
             disabled={isRendering}
-            className="inline-flex h-10 items-center justify-center rounded-lg bg-zinc-900 px-4 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+            className="inline-flex h-10 items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isRendering ? "Rendering…" : "Render video in browser"}
           </button>
           {progress !== null && !error && (
-            <span className="text-sm tabular-nums text-zinc-600 dark:text-zinc-400">
+            <span className="text-sm tabular-nums text-muted-foreground">
               {Math.round(progress * 100)}%
             </span>
           )}
         </div>
         {error && (
-          <p className="text-sm text-red-600 dark:text-red-400" role="alert">
+          <p className="text-sm text-destructive" role="alert">
             {error}
           </p>
         )}
         {lastVideoUrl && (
           <div className="flex flex-col gap-2">
-            <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
+            <p className="text-sm font-medium text-foreground">
               Rendered output
             </p>
             <video
-              className="w-full max-w-md rounded-lg border border-zinc-200 dark:border-zinc-800"
+              className="w-full max-w-md rounded-lg border border-border"
               src={lastVideoUrl}
               controls
             />
             <a
               href={lastVideoUrl}
               download="remotion-poc.mp4"
-              className="inline-flex w-fit text-sm font-medium text-orange-600 underline-offset-4 hover:underline dark:text-orange-400"
+              className="inline-flex w-fit text-sm font-medium text-primary underline-offset-4 hover:underline"
             >
               Download MP4
             </a>
