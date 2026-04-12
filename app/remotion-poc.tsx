@@ -93,7 +93,7 @@ export function RemotionPoc() {
       </div>
 
       <div className="flex shrink-0 justify-center px-6">
-        <div className="w-full max-w-2xl rounded-t-lg border-x border-t border-border border-b-0 bg-white/3">
+        <div className="w-full max-w-2xl rounded-t-4xl border-x border-t border-border border-b-0 bg-card">
           <div className="flex flex-col gap-3 p-4">
             <div className="flex w-full min-w-0 items-center gap-4">
               <div className="flex min-w-0 flex-1 items-center gap-3">
@@ -116,7 +116,7 @@ export function RemotionPoc() {
               </div>
               <div className="flex shrink-0 items-center gap-2">
                 {lastVideoUrl && !isRendering ? (
-                  <Button asChild className="min-w-36 justify-center">
+                  <Button asChild className="min-w-44 justify-center">
                     <a href={lastVideoUrl} download="remotion-poc.mp4">
                       Download
                       {lastVideoBytes !== null
@@ -127,7 +127,7 @@ export function RemotionPoc() {
                 ) : (
                   <Button
                     type="button"
-                    className="w-36 justify-center"
+                    className="w-44 justify-center"
                     onClick={handleRender}
                     disabled={isRendering}
                   >
