@@ -1,0 +1,139 @@
+"use client";
+
+import { Player } from "@remotion/player";
+import { renderMediaOnWeb } from "@remotion/web-renderer";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { POC_COMPOSITION, PocComposition } from "@/remotion/composition";
+
+export function RemotionPoc() {
+  const [progress, setProgress] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isRendering, setIsRendering] = useState(false);
+  const [lastVideoUrl, setLastVideoUrl] = useState<string | null>(null);
+  const lastVideoBlobUrlRef = useRef<string | null>(null);
+
+  const revokeLastUrl = useCallback(() => {
+    if (lastVideoBlobUrlRef.current) {
+      URL.revokeObjectURL(lastVideoBlobUrlRef.current);
+      lastVideoBlobUrlRef.current = null;
+    }
+    setLastVideoUrl(null);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (lastVideoBlobUrlRef.current) {
+        URL.revokeObjectURL(lastVideoBlobUrlRef.current);
+        lastVideoBlobUrlRef.current = null;
+      }
+    };
+  }, []);
+
+  const handleRender = async () => {
+    setError(null);
+    revokeLastUrl();
+    setProgress(0);
+    setIsRendering(true);
+    try {
+      const { getBlob } = await renderMediaOnWeb({
+        composition: {
+          id: POC_COMPOSITION.id,
+          component: PocComposition,
+          durationInFrames: POC_COMPOSITION.durationInFrames,
+          fps: POC_COMPOSITION.fps,
+          width: POC_COMPOSITION.width,
+          height: POC_COMPOSITION.height,
+          calculateMetadata: null,
+        },
+        inputProps: {},
+        onProgress: ({ progress: p }) => setProgress(p),
+      });
+      const blob = await getBlob();
+      const url = URL.createObjectURL(blob);
+      lastVideoBlobUrlRef.current = url;
+      setLastVideoUrl(url);
+      setProgress(1);
+    } catch (e) {
+      const message = e instanceof Error ? e.message : String(e);
+      setError(message);
+      setProgress(null);
+    } finally {
+      setIsRendering(false);
+    }
+  };
+
+  return (
+    <div className="flex w-full max-w-2xl flex-col gap-8">
+      <div>
+        <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+          Preview
+        </h2>
+        <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+          Remotion Player (same composition as client-side render).
+        </p>
+        <div className="mt-4 overflow-hidden rounded-lg border border-zinc-200 bg-black shadow-sm dark:border-zinc-800">
+          <Player
+            component={PocComposition}
+            durationInFrames={POC_COMPOSITION.durationInFrames}
+            fps={POC_COMPOSITION.fps}
+            compositionWidth={POC_COMPOSITION.width}
+            compositionHeight={POC_COMPOSITION.height}
+            controls
+            acknowledgeRemotionLicense
+            style={{ width: "100%" }}
+          />
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-3">
+        <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+          Client-side render
+        </h2>
+        <p className="text-sm text-zinc-600 dark:text-zinc-400">
+          Uses <code className="rounded bg-zinc-100 px-1 py-0.5 font-mono text-xs dark:bg-zinc-800">renderMediaOnWeb</code>{" "}
+          from <code className="rounded bg-zinc-100 px-1 py-0.5 font-mono text-xs dark:bg-zinc-800">@remotion/web-renderer</code>
+          . Requires WebCodecs (Chrome 94+, Firefox 130+, Safari 26+).
+        </p>
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            onClick={handleRender}
+            disabled={isRendering}
+            className="inline-flex h-10 items-center justify-center rounded-lg bg-zinc-900 px-4 text-sm font-medium text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+          >
+            {isRendering ? "Rendering…" : "Render video in browser"}
+          </button>
+          {progress !== null && !error && (
+            <span className="text-sm tabular-nums text-zinc-600 dark:text-zinc-400">
+              {Math.round(progress * 100)}%
+            </span>
+          )}
+        </div>
+        {error && (
+          <p className="text-sm text-red-600 dark:text-red-400" role="alert">
+            {error}
+          </p>
+        )}
+        {lastVideoUrl && (
+          <div className="flex flex-col gap-2">
+            <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
+              Rendered output
+            </p>
+            <video
+              className="w-full max-w-md rounded-lg border border-zinc-200 dark:border-zinc-800"
+              src={lastVideoUrl}
+              controls
+            />
+            <a
+              href={lastVideoUrl}
+              download="remotion-poc.mp4"
+              className="inline-flex w-fit text-sm font-medium text-orange-600 underline-offset-4 hover:underline dark:text-orange-400"
+            >
+              Download MP4
+            </a>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
