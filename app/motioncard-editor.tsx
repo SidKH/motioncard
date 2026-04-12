@@ -108,58 +108,63 @@ export function MotioncardEditor() {
         </div>
       </div>
 
-      <div className="flex shrink-0 justify-center px-6">
-        <div className="w-full max-w-2xl rounded-t-4xl border-x border-t border-border border-b-0 bg-card">
-          <div className="flex flex-col gap-3 p-4">
-            <div className="flex w-full min-w-0 flex-row flex-wrap items-center gap-x-4 gap-y-3">
-              <div className="flex shrink-0 items-center">
-                <Select
-                  value={background}
-                  onValueChange={(v) =>
-                    setBackground(v as PocBackgroundId)
-                  }
-                >
-                  <SelectTrigger
-                    size="sm"
-                    aria-label="Background"
-                    className="w-44"
+      <div className="flex shrink-0 justify-center px-0 sm:px-6">
+        <div className="w-full max-w-2xl rounded-none border-t border-border border-b-0 bg-card sm:rounded-t-4xl sm:border-x">
+          <div className="flex flex-col gap-4 p-4">
+            <div className="flex w-full min-w-0 flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-4 sm:gap-y-4">
+              <div className="flex min-w-0 w-full flex-row items-center gap-3 sm:flex-1 sm:gap-x-3">
+                <div className="min-w-0 flex-1 sm:flex-none sm:shrink-0">
+                  <Select
+                    value={background}
+                    onValueChange={(v) =>
+                      setBackground(v as PocBackgroundId)
+                    }
                   >
-                    <SelectValue placeholder="Background" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="silk">Silk</SelectItem>
-                    <SelectItem value="smoke">Smoke</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex min-w-0 flex-1 items-center gap-3">
-                <span
-                  className="inline-flex shrink-0 text-muted-foreground"
-                  title="Font size"
-                  aria-hidden
-                >
-                  <ALargeSmall className="size-4" />
-                </span>
-                <div
-                  className={cn(
-                    "min-w-0 flex-1",
-                    "[&_[data-slot=slider-range]]:!bg-zinc-300 dark:[&_[data-slot=slider-range]]:!bg-zinc-500",
-                  )}
-                >
-                  <Slider
-                    value={[fontSizeProgress]}
-                    onValueChange={(v) => setFontSizeProgress(v[0] ?? 50)}
-                    min={0}
-                    max={100}
-                    step={1}
-                    className="w-full"
-                    aria-label="Font size"
-                  />
+                    <SelectTrigger
+                      size="sm"
+                      aria-label="Background"
+                      className="w-full sm:w-44"
+                    >
+                      <SelectValue placeholder="Background" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="silk">Silk</SelectItem>
+                      <SelectItem value="smoke">Smoke</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
+                  <span
+                    className="inline-flex shrink-0 text-muted-foreground"
+                    title="Font size"
+                    aria-hidden
+                  >
+                    <ALargeSmall className="size-4" />
+                  </span>
+                  <div
+                    className={cn(
+                      "min-w-0 flex-1",
+                      "[&_[data-slot=slider-range]]:!bg-zinc-300 dark:[&_[data-slot=slider-range]]:!bg-zinc-500",
+                    )}
+                  >
+                    <Slider
+                      value={[fontSizeProgress]}
+                      onValueChange={(v) => setFontSizeProgress(v[0] ?? 50)}
+                      min={0}
+                      max={100}
+                      step={1}
+                      className="w-full"
+                      aria-label="Font size"
+                    />
+                  </div>
                 </div>
               </div>
-              <div className="ml-auto flex shrink-0 items-center gap-2">
+              <div className="flex w-full shrink-0 items-center justify-stretch sm:ml-auto sm:w-auto sm:justify-end">
                 {lastVideoUrl && !isRendering ? (
-                  <Button asChild className="min-w-44 justify-center">
+                  <Button
+                    asChild
+                    className="min-w-44 w-full justify-center sm:w-auto"
+                  >
                     <a href={lastVideoUrl} download="motioncard.mp4">
                       Download
                       {lastVideoBytes !== null
@@ -170,7 +175,7 @@ export function MotioncardEditor() {
                 ) : (
                   <Button
                     type="button"
-                    className="w-44 justify-center"
+                    className="w-full min-w-44 justify-center sm:w-44"
                     onClick={handleRender}
                     disabled={isRendering}
                   >
