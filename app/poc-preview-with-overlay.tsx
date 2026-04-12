@@ -16,11 +16,13 @@ import {
 type PocPreviewWithOverlayProps = {
   readonly text: string;
   readonly onTextChange: (value: string) => void;
+  readonly fontSizeProgress: number;
 };
 
 export function PocPreviewWithOverlay({
   text,
   onTextChange,
+  fontSizeProgress,
 }: PocPreviewWithOverlayProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -45,7 +47,9 @@ export function PocPreviewWithOverlay({
   const w = displaySize.w;
   const h = displaySize.h;
   const pad = measured ? getPocTitlePaddingPx(w, h) : { x: 0, y: 0 };
-  const fontPx = measured ? getPocTitleOverlayFontSizePx(w) : 0;
+  const fontPx = measured
+    ? getPocTitleOverlayFontSizePx(w, fontSizeProgress)
+    : 0;
   const maxTextareaHeight = measured ? Math.max(0, h - 2 * pad.y) : 0;
 
   useEffect(() => {
@@ -76,7 +80,7 @@ export function PocPreviewWithOverlay({
     >
       <Player
         component={PocComposition}
-        inputProps={{ text, hideTitle: true }}
+        inputProps={{ text, hideTitle: true, fontSizeProgress }}
         durationInFrames={POC_COMPOSITION.durationInFrames}
         fps={POC_COMPOSITION.fps}
         compositionWidth={POC_COMPOSITION.width}

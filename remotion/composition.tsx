@@ -22,15 +22,22 @@ export const POC_COMPOSITION = {
 
 export type PocCompositionProps = {
   readonly text: string;
+  /** 0–100; 50 = default scale (see `getPocTitleFontSizeMultiplier`). */
+  readonly fontSizeProgress?: number;
   /** Preview-only: skip drawing title when an HTML overlay shows the same text. */
   readonly hideTitle?: boolean;
 };
 
 export const POC_COMPOSITION_DEFAULT_PROPS: PocCompositionProps = {
   text: "Hello world",
+  fontSizeProgress: 50,
 };
 
-export function PocComposition({ text, hideTitle }: PocCompositionProps) {
+export function PocComposition({
+  text,
+  fontSizeProgress = 50,
+  hideTitle,
+}: PocCompositionProps) {
   const { width, height } = useVideoConfig();
   const pad = getPocTitlePaddingPx(width, height);
 
@@ -60,7 +67,7 @@ export function PocComposition({ text, hideTitle }: PocCompositionProps) {
             style={{
               color: POC_TITLE_COLOR,
               fontFamily: POC_TITLE_FONT_FAMILY,
-              fontSize: getPocTitleFontSizePx(width),
+              fontSize: getPocTitleFontSizePx(width, fontSizeProgress),
               fontWeight: POC_TITLE_FONT_WEIGHT,
               letterSpacing: POC_TITLE_LETTER_SPACING,
               lineHeight: POC_TITLE_LINE_HEIGHT,

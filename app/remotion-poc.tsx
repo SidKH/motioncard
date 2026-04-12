@@ -15,7 +15,6 @@ import {
 export function RemotionPoc() {
   const [text, setText] = useState(POC_COMPOSITION_DEFAULT_PROPS.text);
   const [renderProgress, setRenderProgress] = useState<number | null>(null);
-  /** Font size control (0–100); wire into preview typography when ready. */
   const [fontSizeProgress, setFontSizeProgress] = useState(50);
   const [error, setError] = useState<string | null>(null);
   const [isRendering, setIsRendering] = useState(false);
@@ -56,7 +55,7 @@ export function RemotionPoc() {
           height: POC_COMPOSITION.height,
           calculateMetadata: null,
         },
-        inputProps: { text },
+        inputProps: { text, fontSizeProgress },
         onProgress: ({ progress: p }) => setRenderProgress(p),
       });
       const blob = await getBlob();
@@ -77,7 +76,11 @@ export function RemotionPoc() {
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex min-h-0 flex-1 items-center justify-center px-6 py-6">
         <div className="w-full max-w-2xl">
-          <PocPreviewWithOverlay text={text} onTextChange={setText} />
+          <PocPreviewWithOverlay
+            text={text}
+            onTextChange={setText}
+            fontSizeProgress={fontSizeProgress}
+          />
         </div>
       </div>
 

@@ -11,15 +11,27 @@ export const POC_TITLE_LETTER_SPACING = "-0.02em";
 const TITLE_FONT_AT_REFERENCE_PX = 112;
 const TITLE_FONT_MIN_PX = 56;
 
+/** Slider 0–100: 0.5× … 1.0× … 1.5× (50 = default). */
+export function getPocTitleFontSizeMultiplier(
+  progress0to100: number,
+): number {
+  const t = Math.max(0, Math.min(100, progress0to100)) / 100;
+  return 0.5 + t;
+}
+
 /**
  * Title size inside the Remotion frame (composition coordinates).
  * Uses a minimum so tiny frame widths stay readable in templates.
  */
-export function getPocTitleFontSizePx(frameWidth: number): number {
-  return Math.max(
-    TITLE_FONT_MIN_PX,
-    Math.round((frameWidth * TITLE_FONT_AT_REFERENCE_PX) / POC_TITLE_FRAME_WIDTH),
+export function getPocTitleFontSizePx(
+  frameWidth: number,
+  fontSizeProgress = 50,
+): number {
+  const base = Math.round(
+    (frameWidth * TITLE_FONT_AT_REFERENCE_PX) / POC_TITLE_FRAME_WIDTH,
   );
+  const scaled = Math.round(base * getPocTitleFontSizeMultiplier(fontSizeProgress));
+  return Math.max(TITLE_FONT_MIN_PX, scaled);
 }
 
 /**
@@ -27,15 +39,19 @@ export function getPocTitleFontSizePx(frameWidth: number): number {
  * down by how wide the Player is on screen. No composition min — otherwise the
  * overlay stops shrinking below ~960px and looks larger than the scaled video.
  */
-export function getPocTitleOverlayFontSizePx(displayWidthPx: number): number {
+export function getPocTitleOverlayFontSizePx(
+  displayWidthPx: number,
+  fontSizeProgress = 50,
+): number {
   const scaled = Math.round(
     (displayWidthPx * TITLE_FONT_AT_REFERENCE_PX) / POC_TITLE_FRAME_WIDTH,
   );
-  return Math.max(1, scaled);
+  const out = Math.round(scaled * getPocTitleFontSizeMultiplier(fontSizeProgress));
+  return Math.max(1, out);
 }
 
-/** Horizontal / vertical padding around the title (fraction of frame width / height). */
-export const POC_TITLE_PADDING_X_RATIO = 0.05;
+/** Horizontal / vertical padding around the title (10% width, 6% height). */
+export const POC_TITLE_PADDING_X_RATIO = 0.1;
 export const POC_TITLE_PADDING_Y_RATIO = 0.06;
 
 export function getPocTitlePaddingPx(
