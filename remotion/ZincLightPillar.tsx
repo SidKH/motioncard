@@ -15,9 +15,9 @@ const ZINC_TOP_RGB: readonly [number, number, number] = [
 /** Black — base stays as dark as possible. */
 const ZINC_BOTTOM_RGB: readonly [number, number, number] = [0, 0, 0];
 
-const STEP_MULT = 1.2;
-const MAX_ITER = 40;
-const WAVE_ITER = 2;
+const STEP_MULT = 1.12;
+const MAX_ITER = 56;
+const WAVE_ITER = 3;
 
 const VERTEX_SHADER = `
 attribute vec2 a_position;
@@ -31,7 +31,8 @@ void main() {
 
 const FRAGMENT_SHADER = `
 #ifdef GL_ES
-precision mediump float;
+/* mediump angles lose precision near 2π and cause a visible seam on looped clips. */
+precision highp float;
 #endif
 
 varying vec2 vUv;
@@ -87,7 +88,8 @@ void main() {
     p.xz = vec2(rotC * p.x - rotS * p.z, rotS * p.x + rotC * p.z);
 
     vec3 q = p;
-    q.y = p.y * uPillarHeight + uPhase;
+    // Keep phase out of q.y: sin(q.y * k + uPhase) would mix non-integer phase weights and break 2π loops.
+    q.y = p.y * uPillarHeight;
 
     float freq = 1.0;
     float amp = 1.0;
@@ -98,21 +100,39 @@ void main() {
       );
       q += cos(q.zxy * freq - uPhase * float(j) * 2.0) * amp;
       freq *= 2.0;
-      amp *= 0.5;
+      amp *= 0.48;
     }
 
-    float d = length(cos(q.xz)) - 0.2;
+    // Slow billow: use p for fractional scales + integer uPhase only (see q.y note above).
+    vec2 billow = vec2(
+      sin(p.y * uPillarHeight * 0.22 + uPhase * 1.0) + 0.45 * sin(dot(p.xz, vec2(0.74, 0.91)) + uPhase * 2.0),
+      cos(p.y * uPillarHeight * 0.19 - uPhase * 1.0) + 0.4 * cos(dot(p.xz, vec2(-0.88, 0.67)) - uPhase * 2.0)
+    );
+    float fine = 0.16 * sin(dot(p.xz, vec2(1.7, -1.2)) + uPhase * 2.0 + p.y * uPillarHeight * 0.35);
+    float d = length(cos(q.xz + billow * 0.28 + fine)) - 0.22;
     float bound = length(p.xz) - uPillarWidth;
     float k = 4.0;
     float h = max(k - abs(d - bound), 0.0);
     d = max(d, bound) + h * h * 0.0625 / k;
-    d = abs(d) * 0.15 + 0.01;
+    // Softer falloff = more in-scattering along the ray (reads as thicker smoke).
+    d = pow(abs(d) * 0.17 + 0.012, 0.72);
 
     float grad = clamp((15.0 - p.y) / 30.0, 0.0, 1.0);
-    col += mix(uBottomColor, uTopColor, grad) / d;
+    vec3 smokeCol = mix(uBottomColor, uTopColor, grad);
+
+    // Core column
+    col += smokeCol / d;
+
+    // Wide soft haze: extra volumetric fill outside the tight SDF (more "smoke in the air").
+    float r = length(p.xz);
+    float haze = exp(-pow(r / max(uPillarWidth * 2.1, 0.01), 2.0));
+    haze *= 0.22 + 0.14 * sin(p.y * 0.28 + uPhase * 1.0)
+      + 0.1 * sin(dot(p.xz, vec2(0.63, -0.77)) + uPhase * 2.0);
+    float dHaze = pow(abs(0.42 + 0.11 * sin(p.y * uPillarHeight * 0.31 + dot(p.xz, vec2(0.4, 0.5)) + uPhase * 1.0)), 0.88);
+    col += smokeCol * haze / max(dHaze, 0.035);
 
     t += d * STEP_MULT;
-    if (t > 50.0) break;
+    if (t > 58.0) break;
   }
 
   float widthNorm = uPillarWidth / 3.0;
@@ -253,13 +273,20 @@ function initGlResources(canvas: HTMLCanvasElement): GlResources | null {
   };
 }
 
+const TWO_PI = 2 * Math.PI;
+
 /**
- * Phase [0, 2π] over the composition so looping clips align with the first frame.
+ * Phase in [0, 2π] over the composition so the last frame matches the first when looped.
+ * Any `sin(phase * k)` / `cos(phase * k)` (in JS or GLSL) must use **integer** `k`, or the
+ * endpoints disagree and the loop will jump.
+ * Do not fold `uPhase` into coordinates that are later scaled by non-integers inside sin/cos.
  */
 function pillarPhase(frame: number, durationInFrames: number): number {
   const n = Math.max(1, durationInFrames);
   if (n === 1) return 0;
-  return (frame / (n - 1)) * (2 * Math.PI);
+  if (frame <= 0) return 0;
+  if (frame >= n - 1) return TWO_PI;
+  return (frame / (n - 1)) * TWO_PI;
 }
 
 function drawPillarCpuFallback(
@@ -291,6 +318,8 @@ function drawPillarCpuFallback(
 }
 
 const WAVE_ANGLE = 0.4;
+/** Extra swirl so the column reads less like a rigid beam and more like drifting smoke. */
+const WAVE_ANGLE_WOBBLE = 0.22;
 
 export function ZincLightPillar({
   widthPx,
@@ -298,11 +327,11 @@ export function ZincLightPillar({
   visibleOpacity = 1,
   topRgb = ZINC_TOP_RGB,
   bottomRgb = ZINC_BOTTOM_RGB,
-  intensity = 0.58,
-  glowAmount = 0.0035,
-  pillarWidth = 3,
+  intensity = 0.68,
+  glowAmount = 0.0042,
+  pillarWidth = 3.6,
   pillarHeight = 0.4,
-  noiseIntensity = 0.5,
+  noiseIntensity = 0.62,
   pillarRotationDeg,
 }: {
   readonly widthPx: number;
@@ -392,8 +421,10 @@ export function ZincLightPillar({
         if (uRotSin) gl.uniform1f(uRotSin, Math.sin(phase));
         if (uPillarRotCos) gl.uniform1f(uPillarRotCos, Math.cos(pillarRotRad));
         if (uPillarRotSin) gl.uniform1f(uPillarRotSin, Math.sin(pillarRotRad));
-        if (uWaveSin) gl.uniform1f(uWaveSin, Math.sin(WAVE_ANGLE));
-        if (uWaveCos) gl.uniform1f(uWaveCos, Math.cos(WAVE_ANGLE));
+        const waveAngle =
+          WAVE_ANGLE + WAVE_ANGLE_WOBBLE * Math.sin(phase);
+        if (uWaveSin) gl.uniform1f(uWaveSin, Math.sin(waveAngle));
+        if (uWaveCos) gl.uniform1f(uWaveCos, Math.cos(waveAngle));
 
         gl.clearColor(0, 0, 0, 1);
         gl.clear(gl.COLOR_BUFFER_BIT);
