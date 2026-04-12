@@ -14,7 +14,15 @@ export const POC_COMPOSITION = {
 /** Tailwind `zinc-50` */
 const ZINC_50 = "#fafafa";
 
-export function PocComposition() {
+export type PocCompositionProps = {
+  readonly text: string;
+};
+
+export const POC_COMPOSITION_DEFAULT_PROPS: PocCompositionProps = {
+  text: "Hello world",
+};
+
+export function PocComposition({ text }: PocCompositionProps) {
   const { width, height } = useVideoConfig();
 
   return (
@@ -37,7 +45,7 @@ export function PocComposition() {
           letterSpacing: "-0.02em",
         }}
       >
-        Hello world
+        {text}
       </div>
     </AbsoluteFill>
   );

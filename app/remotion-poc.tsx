@@ -3,9 +3,14 @@
 import { Player } from "@remotion/player";
 import { renderMediaOnWeb } from "@remotion/web-renderer";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { POC_COMPOSITION, PocComposition } from "@/remotion/composition";
+import {
+  POC_COMPOSITION,
+  POC_COMPOSITION_DEFAULT_PROPS,
+  PocComposition,
+} from "@/remotion/composition";
 
 export function RemotionPoc() {
+  const [text, setText] = useState(POC_COMPOSITION_DEFAULT_PROPS.text);
   const [progress, setProgress] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isRendering, setIsRendering] = useState(false);
@@ -39,13 +44,14 @@ export function RemotionPoc() {
         composition: {
           id: POC_COMPOSITION.id,
           component: PocComposition,
+          defaultProps: POC_COMPOSITION_DEFAULT_PROPS,
           durationInFrames: POC_COMPOSITION.durationInFrames,
           fps: POC_COMPOSITION.fps,
           width: POC_COMPOSITION.width,
           height: POC_COMPOSITION.height,
           calculateMetadata: null,
         },
-        inputProps: {},
+        inputProps: { text },
         onProgress: ({ progress: p }) => setProgress(p),
       });
       const blob = await getBlob();
@@ -71,9 +77,24 @@ export function RemotionPoc() {
         <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
           Remotion Player (same composition as client-side render).
         </p>
+        <label className="mt-4 flex flex-col gap-1.5">
+          <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
+            Text
+          </span>
+          <input
+            type="text"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 shadow-sm outline-none ring-zinc-400 placeholder:text-zinc-400 focus:border-zinc-400 focus:ring-2 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-50 dark:ring-zinc-500 dark:focus:border-zinc-500"
+            placeholder="Enter on-screen text"
+            autoComplete="off"
+            spellCheck={false}
+          />
+        </label>
         <div className="mt-4 overflow-hidden rounded-lg border border-zinc-200 bg-black shadow-sm dark:border-zinc-800">
           <Player
             component={PocComposition}
+            inputProps={{ text }}
             durationInFrames={POC_COMPOSITION.durationInFrames}
             fps={POC_COMPOSITION.fps}
             compositionWidth={POC_COMPOSITION.width}
