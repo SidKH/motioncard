@@ -12,6 +12,11 @@ import {
   PocComposition,
 } from "@/remotion/composition";
 
+function formatMegabytes(bytes: number): string {
+  const mb = bytes / (1024 * 1024);
+  return `${mb >= 1 ? mb.toFixed(1) : mb.toFixed(2)} MB`;
+}
+
 export function RemotionPoc() {
   const [text, setText] = useState(POC_COMPOSITION_DEFAULT_PROPS.text);
   const [renderProgress, setRenderProgress] = useState<number | null>(null);
@@ -19,6 +24,7 @@ export function RemotionPoc() {
   const [error, setError] = useState<string | null>(null);
   const [isRendering, setIsRendering] = useState(false);
   const [lastVideoUrl, setLastVideoUrl] = useState<string | null>(null);
+  const [lastVideoBytes, setLastVideoBytes] = useState<number | null>(null);
   const lastVideoBlobUrlRef = useRef<string | null>(null);
 
   const revokeLastUrl = useCallback(() => {
@@ -27,6 +33,7 @@ export function RemotionPoc() {
       lastVideoBlobUrlRef.current = null;
     }
     setLastVideoUrl(null);
+    setLastVideoBytes(null);
   }, []);
 
   useEffect(() => {
@@ -62,6 +69,7 @@ export function RemotionPoc() {
       const url = URL.createObjectURL(blob);
       lastVideoBlobUrlRef.current = url;
       setLastVideoUrl(url);
+      setLastVideoBytes(blob.size);
       setRenderProgress(null);
     } catch (e) {
       const message = e instanceof Error ? e.message : String(e);
@@ -108,9 +116,12 @@ export function RemotionPoc() {
               </div>
               <div className="flex shrink-0 items-center gap-2">
                 {lastVideoUrl && !isRendering ? (
-                  <Button asChild className="w-36 justify-center">
+                  <Button asChild className="min-w-36 justify-center">
                     <a href={lastVideoUrl} download="remotion-poc.mp4">
-                      Download video
+                      Download
+                      {lastVideoBytes !== null
+                        ? ` (${formatMegabytes(lastVideoBytes)})`
+                        : null}
                     </a>
                   </Button>
                 ) : (
