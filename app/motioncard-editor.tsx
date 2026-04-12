@@ -152,7 +152,7 @@ export function MotioncardEditor() {
                       onValueChange={(v) => setFontSizeProgress(v[0] ?? 50)}
                       min={0}
                       max={100}
-                      step={1}
+                      step={10}
                       className="w-full"
                       aria-label="Font size"
                     />
