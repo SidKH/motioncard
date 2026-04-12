@@ -27,18 +27,6 @@ export function PocPreviewWithOverlay({
   const [displaySize, setDisplaySize] = useState({ w: 0, h: 0 });
 
   useEffect(() => {
-    const ta = textareaRef.current;
-    if (!ta) return;
-    ta.focus();
-    const placeCaretAtEnd = () => {
-      const len = ta.value.length;
-      ta.setSelectionRange(len, len);
-    };
-    placeCaretAtEnd();
-    requestAnimationFrame(placeCaretAtEnd);
-  }, []);
-
-  useEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
 
@@ -53,11 +41,25 @@ export function PocPreviewWithOverlay({
     return () => ro.disconnect();
   }, []);
 
-  const w = displaySize.w > 0 ? displaySize.w : 480;
-  const h = displaySize.h > 0 ? displaySize.h : Math.round((480 * 9) / 16);
-  const pad = getPocTitlePaddingPx(w, h);
-  const fontPx = getPocTitleOverlayFontSizePx(w);
-  const maxTextareaHeight = Math.max(0, h - 2 * pad.y);
+  const measured = displaySize.w > 0 && displaySize.h > 0;
+  const w = displaySize.w;
+  const h = displaySize.h;
+  const pad = measured ? getPocTitlePaddingPx(w, h) : { x: 0, y: 0 };
+  const fontPx = measured ? getPocTitleOverlayFontSizePx(w) : 0;
+  const maxTextareaHeight = measured ? Math.max(0, h - 2 * pad.y) : 0;
+
+  useEffect(() => {
+    if (!measured) return;
+    const ta = textareaRef.current;
+    if (!ta) return;
+    ta.focus();
+    const placeCaretAtEnd = () => {
+      const len = ta.value.length;
+      ta.setSelectionRange(len, len);
+    };
+    placeCaretAtEnd();
+    requestAnimationFrame(placeCaretAtEnd);
+  }, [measured]);
 
   useEffect(() => {
     const ta = textareaRef.current;
@@ -84,41 +86,43 @@ export function PocPreviewWithOverlay({
         acknowledgeRemotionLicense
         style={{ width: "100%", display: "block" }}
       />
-      <div
-        className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center"
-        style={{
-          paddingLeft: pad.x,
-          paddingRight: pad.x,
-          paddingTop: pad.y,
-          paddingBottom: pad.y,
-          boxSizing: "border-box",
-        }}
-      >
-        <textarea
-          ref={textareaRef}
-          value={text}
-          onChange={(e) => onTextChange(e.target.value)}
-          spellCheck={false}
-          autoComplete="off"
-          aria-label="On-screen text"
-          rows={1}
-          className="pointer-events-auto min-h-0 w-full max-w-full resize-none overflow-y-auto border-0 bg-transparent text-center outline-none ring-0 placeholder:text-muted-foreground/40 focus:ring-0"
+      {measured ? (
+        <div
+          className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center"
           style={{
-            color: POC_TITLE_COLOR,
-            caretColor: POC_TITLE_COLOR,
-            fontFamily: POC_TITLE_FONT_FAMILY,
-            fontSize: fontPx,
-            fontWeight: POC_TITLE_FONT_WEIGHT,
-            letterSpacing: POC_TITLE_LETTER_SPACING,
-            lineHeight: POC_TITLE_LINE_HEIGHT,
-            maxHeight: maxTextareaHeight,
-            whiteSpace: "pre-wrap",
-            overflowWrap: "break-word",
-            wordBreak: "break-word",
+            paddingLeft: pad.x,
+            paddingRight: pad.x,
+            paddingTop: pad.y,
+            paddingBottom: pad.y,
+            boxSizing: "border-box",
           }}
-          placeholder="Type here…"
-        />
-      </div>
+        >
+          <textarea
+            ref={textareaRef}
+            value={text}
+            onChange={(e) => onTextChange(e.target.value)}
+            spellCheck={false}
+            autoComplete="off"
+            aria-label="On-screen text"
+            rows={1}
+            className="pointer-events-auto min-h-0 w-full max-w-full resize-none overflow-y-auto border-0 bg-transparent text-center outline-none ring-0 placeholder:text-muted-foreground/40 focus:ring-0"
+            style={{
+              color: POC_TITLE_COLOR,
+              caretColor: POC_TITLE_COLOR,
+              fontFamily: POC_TITLE_FONT_FAMILY,
+              fontSize: fontPx,
+              fontWeight: POC_TITLE_FONT_WEIGHT,
+              letterSpacing: POC_TITLE_LETTER_SPACING,
+              lineHeight: POC_TITLE_LINE_HEIGHT,
+              maxHeight: maxTextareaHeight,
+              whiteSpace: "pre-wrap",
+              overflowWrap: "break-word",
+              wordBreak: "break-word",
+            }}
+            placeholder="Type here…"
+          />
+        </div>
+      ) : null}
     </div>
   );
 }
