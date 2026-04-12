@@ -99,7 +99,8 @@ export function RemotionPoc() {
             fps={POC_COMPOSITION.fps}
             compositionWidth={POC_COMPOSITION.width}
             compositionHeight={POC_COMPOSITION.height}
-            controls
+            loop
+            autoPlay
             acknowledgeRemotionLicense
             style={{ width: "100%" }}
           />
