@@ -2,7 +2,11 @@
 
 import { Player } from "@remotion/player";
 import { useEffect, useRef, useState } from "react";
-import { POC_COMPOSITION, PocComposition } from "@/remotion/composition";
+import {
+  POC_COMPOSITION,
+  PocComposition,
+  type PocBackgroundId,
+} from "@/remotion/composition";
 import {
   getPocTitleOverlayFontSizePx,
   getPocTitlePaddingPx,
@@ -17,12 +21,14 @@ type PocPreviewWithOverlayProps = {
   readonly text: string;
   readonly onTextChange: (value: string) => void;
   readonly fontSizeProgress: number;
+  readonly background: PocBackgroundId;
 };
 
 export function PocPreviewWithOverlay({
   text,
   onTextChange,
   fontSizeProgress,
+  background,
 }: PocPreviewWithOverlayProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -79,8 +85,9 @@ export function PocPreviewWithOverlay({
       className="relative overflow-hidden rounded-2xl border border-border bg-media-canvas shadow-sm"
     >
       <Player
+        key={background}
         component={PocComposition}
-        inputProps={{ text, hideTitle: true, fontSizeProgress }}
+        inputProps={{ text, hideTitle: true, fontSizeProgress, background }}
         durationInFrames={POC_COMPOSITION.durationInFrames}
         fps={POC_COMPOSITION.fps}
         compositionWidth={POC_COMPOSITION.width}

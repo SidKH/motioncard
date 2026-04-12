@@ -5,11 +5,19 @@ import { ALargeSmall } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PocPreviewWithOverlay } from "@/app/poc-preview-with-overlay";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import {
   POC_COMPOSITION,
   POC_COMPOSITION_DEFAULT_PROPS,
   PocComposition,
+  type PocBackgroundId,
 } from "@/remotion/composition";
 import { cn } from "@/lib/utils";
 
@@ -22,6 +30,9 @@ export function RemotionPoc() {
   const [text, setText] = useState(POC_COMPOSITION_DEFAULT_PROPS.text);
   const [renderProgress, setRenderProgress] = useState<number | null>(null);
   const [fontSizeProgress, setFontSizeProgress] = useState(50);
+  const [background, setBackground] = useState<PocBackgroundId>(
+    POC_COMPOSITION_DEFAULT_PROPS.background ?? "silk",
+  );
   const [error, setError] = useState<string | null>(null);
   const [isRendering, setIsRendering] = useState(false);
   const [lastVideoUrl, setLastVideoUrl] = useState<string | null>(null);
@@ -63,7 +74,7 @@ export function RemotionPoc() {
           height: POC_COMPOSITION.height,
           calculateMetadata: null,
         },
-        inputProps: { text, fontSizeProgress },
+        inputProps: { text, fontSizeProgress, background },
         onProgress: ({ progress: p }) => setRenderProgress(p),
       });
       const blob = await getBlob();
@@ -89,6 +100,7 @@ export function RemotionPoc() {
             text={text}
             onTextChange={setText}
             fontSizeProgress={fontSizeProgress}
+            background={background}
           />
           <p className="text-center text-sm text-zinc-500">
             Your message on animated backgrounds
@@ -99,7 +111,27 @@ export function RemotionPoc() {
       <div className="flex shrink-0 justify-center px-6">
         <div className="w-full max-w-2xl rounded-t-4xl border-x border-t border-border border-b-0 bg-card">
           <div className="flex flex-col gap-3 p-4">
-            <div className="flex w-full min-w-0 items-center gap-4">
+            <div className="flex w-full min-w-0 flex-row flex-wrap items-center gap-x-4 gap-y-3">
+              <div className="flex shrink-0 items-center">
+                <Select
+                  value={background}
+                  onValueChange={(v) =>
+                    setBackground(v as PocBackgroundId)
+                  }
+                >
+                  <SelectTrigger
+                    size="sm"
+                    aria-label="Background"
+                    className="w-44"
+                  >
+                    <SelectValue placeholder="Background" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="silk">Silk</SelectItem>
+                    <SelectItem value="smoke">Smoke</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               <div className="flex min-w-0 flex-1 items-center gap-3">
                 <span
                   className="inline-flex shrink-0 text-muted-foreground"
@@ -125,7 +157,7 @@ export function RemotionPoc() {
                   />
                 </div>
               </div>
-              <div className="flex shrink-0 items-center gap-2">
+              <div className="ml-auto flex shrink-0 items-center gap-2">
                 {lastVideoUrl && !isRendering ? (
                   <Button asChild className="min-w-44 justify-center">
                     <a href={lastVideoUrl} download="remotion-poc.mp4">

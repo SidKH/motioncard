@@ -1,5 +1,6 @@
 import { AbsoluteFill, useVideoConfig } from "remotion";
 import { TitleStripSilk } from "@/remotion/TitleStripSilk";
+import { ZincLightPillar } from "@/remotion/ZincLightPillar";
 import {
   getPocTitleFontSizePx,
   getPocTitlePaddingPx,
@@ -20,10 +21,14 @@ export const POC_COMPOSITION = {
   durationInFrames: 300,
 } as const;
 
+export type PocBackgroundId = "silk" | "smoke";
+
 export type PocCompositionProps = {
   readonly text: string;
   /** 0–100; 50 = default scale (see `getPocTitleFontSizeMultiplier`). */
   readonly fontSizeProgress?: number;
+  /** Animated background behind the title. */
+  readonly background?: PocBackgroundId;
   /** Preview-only: skip drawing title when an HTML overlay shows the same text. */
   readonly hideTitle?: boolean;
 };
@@ -31,11 +36,13 @@ export type PocCompositionProps = {
 export const POC_COMPOSITION_DEFAULT_PROPS: PocCompositionProps = {
   text: "Hello world",
   fontSizeProgress: 50,
+  background: "silk",
 };
 
 export function PocComposition({
   text,
   fontSizeProgress = 50,
+  background = "silk",
   hideTitle,
 }: PocCompositionProps) {
   const { width, height } = useVideoConfig();
@@ -49,7 +56,11 @@ export function PocComposition({
         alignItems: "center",
       }}
     >
-      <TitleStripSilk gridCellPx={72} widthPx={width} heightPx={height} />
+      {background === "smoke" ? (
+        <ZincLightPillar widthPx={width} heightPx={height} />
+      ) : (
+        <TitleStripSilk gridCellPx={72} widthPx={width} heightPx={height} />
+      )}
       {!hideTitle && (
         <div
           style={{
