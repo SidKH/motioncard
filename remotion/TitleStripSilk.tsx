@@ -12,6 +12,9 @@ const SILK_TINT_RGB: readonly [number, number, number] = [
   42 / 255,
 ];
 
+/** Per-pixel noise in the silk shader; lower = smoother (was 1.1). */
+const SILK_NOISE_INTENSITY = 0.5;
+
 const VERTEX_SHADER = `
 attribute vec2 a_position;
 varying vec2 vUv;
@@ -233,7 +236,7 @@ function drawSilkCpu(
   const phi = silkPhi(frame, durationInFrames);
   const uScale = 0.85 + Math.min(0.35, gridCellPx / 72) * 0.25;
   const uRotation = silkRotation(phi);
-  const uNoiseIntensity = 1.1;
+  const uNoiseIntensity = SILK_NOISE_INTENSITY;
   const [cr, cg, cb] = SILK_TINT_RGB;
 
   for (let iy = 0; iy < bh; iy++) {
@@ -351,7 +354,7 @@ export function TitleStripSilk({
           );
         if (uScale) gl.uniform1f(uScale, scale);
         if (uRotation) gl.uniform1f(uRotation, rotation);
-        if (uNoiseIntensity) gl.uniform1f(uNoiseIntensity, 1.1);
+        if (uNoiseIntensity) gl.uniform1f(uNoiseIntensity, SILK_NOISE_INTENSITY);
 
         gl.clearColor(9 / 255, 9 / 255, 11 / 255, 1);
         gl.clear(gl.COLOR_BUFFER_BIT);
