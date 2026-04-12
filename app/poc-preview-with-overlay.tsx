@@ -70,7 +70,7 @@ export function PocPreviewWithOverlay({
   return (
     <div
       ref={wrapRef}
-      className="relative mt-4 overflow-hidden rounded-lg border border-border bg-media-canvas shadow-sm"
+      className="relative overflow-hidden rounded-lg border border-border bg-media-canvas shadow-sm"
     >
       <Player
         component={PocComposition}

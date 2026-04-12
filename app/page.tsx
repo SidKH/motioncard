@@ -8,11 +8,7 @@ export default function Home() {
           <span className="text-sm font-medium text-foreground">Motion Card</span>
         </div>
       </header>
-      <div className="flex flex-1 flex-col items-center px-6 py-16">
-        <main className="flex w-full max-w-3xl flex-col gap-10">
-          <RemotionPoc />
-        </main>
-      </div>
+      <RemotionPoc />
     </div>
   );
 }
