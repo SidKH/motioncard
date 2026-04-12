@@ -1,5 +1,14 @@
 import { AbsoluteFill, useVideoConfig } from "remotion";
 import { TitleStripSilk } from "@/remotion/TitleStripSilk";
+import {
+  getPocTitleFontSizePx,
+  getPocTitlePaddingPx,
+  POC_TITLE_COLOR,
+  POC_TITLE_FONT_FAMILY,
+  POC_TITLE_FONT_WEIGHT,
+  POC_TITLE_LETTER_SPACING,
+  POC_TITLE_LINE_HEIGHT,
+} from "@/remotion/pocTitleTypography";
 
 /** Shared metadata for Player + renderMediaOnWeb */
 export const POC_COMPOSITION = {
@@ -11,19 +20,19 @@ export const POC_COMPOSITION = {
   durationInFrames: 300,
 } as const;
 
-/** Tailwind `zinc-50` */
-const ZINC_50 = "#fafafa";
-
 export type PocCompositionProps = {
   readonly text: string;
+  /** Preview-only: skip drawing title when an HTML overlay shows the same text. */
+  readonly hideTitle?: boolean;
 };
 
 export const POC_COMPOSITION_DEFAULT_PROPS: PocCompositionProps = {
   text: "Hello world",
 };
 
-export function PocComposition({ text }: PocCompositionProps) {
+export function PocComposition({ text, hideTitle }: PocCompositionProps) {
   const { width, height } = useVideoConfig();
+  const pad = getPocTitlePaddingPx(width, height);
 
   return (
     <AbsoluteFill
@@ -34,19 +43,40 @@ export function PocComposition({ text }: PocCompositionProps) {
       }}
     >
       <TitleStripSilk gridCellPx={72} widthPx={width} heightPx={height} />
-      <div
-        style={{
-          position: "relative",
-          zIndex: 1,
-          color: ZINC_50,
-          fontFamily: "system-ui, sans-serif",
-          fontSize: Math.max(56, Math.round((width * 112) / 1920)),
-          fontWeight: 400,
-          letterSpacing: "-0.02em",
-        }}
-      >
-        {text}
-      </div>
+      {!hideTitle && (
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 1,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            boxSizing: "border-box",
+            padding: `${pad.y}px ${pad.x}px`,
+          }}
+        >
+          <div
+            style={{
+              color: POC_TITLE_COLOR,
+              fontFamily: POC_TITLE_FONT_FAMILY,
+              fontSize: getPocTitleFontSizePx(width),
+              fontWeight: POC_TITLE_FONT_WEIGHT,
+              letterSpacing: POC_TITLE_LETTER_SPACING,
+              lineHeight: POC_TITLE_LINE_HEIGHT,
+              textAlign: "center",
+              whiteSpace: "pre-wrap",
+              wordBreak: "break-word",
+              overflowWrap: "break-word",
+              maxWidth: "100%",
+              maxHeight: "100%",
+              overflow: "hidden",
+            }}
+          >
+            {text}
+          </div>
+        </div>
+      )}
     </AbsoluteFill>
   );
 }
