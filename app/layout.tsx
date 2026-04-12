@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Remotion CSR POC",
+  title: "Project X",
   description: "Remotion Player preview and browser-side video render",
 };
 
