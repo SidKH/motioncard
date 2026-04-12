@@ -3,7 +3,7 @@
 import { renderMediaOnWeb } from "@remotion/web-renderer";
 import { ALargeSmall } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { PocPreviewWithOverlay } from "@/app/poc-preview-with-overlay";
+import { MotioncardPreview } from "@/app/motioncard-preview";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -26,7 +26,7 @@ function formatMegabytes(bytes: number): string {
   return `${mb >= 1 ? mb.toFixed(1) : mb.toFixed(2)} MB`;
 }
 
-export function RemotionPoc() {
+export function MotioncardEditor() {
   const [text, setText] = useState(POC_COMPOSITION_DEFAULT_PROPS.text);
   const [renderProgress, setRenderProgress] = useState<number | null>(null);
   const [fontSizeProgress, setFontSizeProgress] = useState(50);
@@ -96,7 +96,7 @@ export function RemotionPoc() {
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex min-h-0 flex-1 items-center justify-center px-6 py-6">
         <div className="flex w-full max-w-2xl flex-col gap-6">
-          <PocPreviewWithOverlay
+          <MotioncardPreview
             text={text}
             onTextChange={setText}
             fontSizeProgress={fontSizeProgress}
@@ -160,7 +160,7 @@ export function RemotionPoc() {
               <div className="ml-auto flex shrink-0 items-center gap-2">
                 {lastVideoUrl && !isRendering ? (
                   <Button asChild className="min-w-44 justify-center">
-                    <a href={lastVideoUrl} download="remotion-poc.mp4">
+                    <a href={lastVideoUrl} download="motioncard.mp4">
                       Download
                       {lastVideoBytes !== null
                         ? ` (${formatMegabytes(lastVideoBytes)})`

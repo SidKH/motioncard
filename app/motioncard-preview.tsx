@@ -17,19 +17,19 @@ import {
   POC_TITLE_LINE_HEIGHT,
 } from "@/remotion/pocTitleTypography";
 
-type PocPreviewWithOverlayProps = {
+type MotioncardPreviewProps = {
   readonly text: string;
   readonly onTextChange: (value: string) => void;
   readonly fontSizeProgress: number;
   readonly background: PocBackgroundId;
 };
 
-export function PocPreviewWithOverlay({
+export function MotioncardPreview({
   text,
   onTextChange,
   fontSizeProgress,
   background,
-}: PocPreviewWithOverlayProps) {
+}: MotioncardPreviewProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [displaySize, setDisplaySize] = useState({ w: 0, h: 0 });

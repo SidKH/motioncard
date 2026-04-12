@@ -1,5 +1,5 @@
 import { MotionCardLogo } from "@/components/motion-card-logo";
-import { RemotionPoc } from "./remotion-poc";
+import { MotioncardEditor } from "./motioncard-editor";
 
 export default function Home() {
   return (
@@ -10,7 +10,7 @@ export default function Home() {
           <span className="text-sm font-medium text-foreground">Motioncard</span>
         </div>
       </header>
-      <RemotionPoc />
+      <MotioncardEditor />
     </div>
   );
 }
