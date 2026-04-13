@@ -37,6 +37,8 @@ export function MotioncardEditor() {
   const [isRendering, setIsRendering] = useState(false);
   const [lastVideoUrl, setLastVideoUrl] = useState<string | null>(null);
   const [lastVideoBytes, setLastVideoBytes] = useState<number | null>(null);
+  // Object URLs from createObjectURL must be revoked; the ref mirrors the downloadable
+  // URL so cleanup can run on unmount and before replacing the blob without stale state.
   const lastVideoBlobUrlRef = useRef<string | null>(null);
 
   const revokeLastUrl = useCallback(() => {
@@ -55,6 +57,7 @@ export function MotioncardEditor() {
 
   useEffect(() => {
     return () => {
+      // Do not call revokeLastUrl() here — it updates state after unmount. Only revoke.
       if (lastVideoBlobUrlRef.current) {
         URL.revokeObjectURL(lastVideoBlobUrlRef.current);
         lastVideoBlobUrlRef.current = null;
@@ -77,8 +80,10 @@ export function MotioncardEditor() {
           fps: COMPOSITION.fps,
           width: COMPOSITION.width,
           height: COMPOSITION.height,
+          // Static composition; metadata comes from the fields above.
           calculateMetadata: null,
         },
+        // Same props as MotioncardPreview's Player so the file matches the canvas.
         inputProps: { text, fontSizeProgress, background },
         onProgress: ({ progress: p }) => setRenderProgress(p),
       });
@@ -150,6 +155,7 @@ export function MotioncardEditor() {
                   <div
                     className={cn(
                       "min-w-0 flex-1",
+                      // Radix slider range doesn’t pick up muted foreground on this surface.
                       "[&_[data-slot=slider-range]]:!bg-zinc-300 dark:[&_[data-slot=slider-range]]:!bg-zinc-500",
                     )}
                   >
