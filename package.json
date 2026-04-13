@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@remotion/google-fonts": "^4.0.448",
     "@remotion/player": "^4.0.448",
     "@remotion/web-renderer": "^4.0.448",
     "@vercel/analytics": "^2.0.1",

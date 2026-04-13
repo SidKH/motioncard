@@ -1,3 +1,5 @@
+import { loadFont } from "@remotion/google-fonts/Inter";
+
 /** Must match `POC_COMPOSITION.width` in composition.tsx */
 export const POC_TITLE_FRAME_WIDTH = 1920;
 
@@ -7,7 +9,13 @@ export const POC_TITLE_COLOR = "#fafafa";
 /** Soft halo for legibility on busy backgrounds (Player + rendered output). */
 export const POC_TITLE_TEXT_SHADOW = "rgba(0, 0, 0, 0.5) 0px 0px 16px";
 
-export const POC_TITLE_FONT_FAMILY = "system-ui, sans-serif";
+const { fontFamily: pocTitleFontFamily } = loadFont("normal", {
+  weights: ["400"],
+  subsets: ["latin"],
+});
+
+/** Inter (Google Fonts), loaded for Remotion + preview overlay. */
+export const POC_TITLE_FONT_FAMILY = pocTitleFontFamily;
 export const POC_TITLE_FONT_WEIGHT = 400;
 export const POC_TITLE_LETTER_SPACING = "-0.02em";
 
