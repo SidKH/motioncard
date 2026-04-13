@@ -11,7 +11,7 @@ export const TITLE_TEXT_SHADOW = "rgba(0, 0, 0, 0.5) 0px 0px 16px";
 
 const { fontFamily: titleFontFamily } = loadFont("normal", {
   weights: ["400"],
-  subsets: ["latin"],
+  subsets: ["latin", "cyrillic", "cyrillic-ext"],
 });
 
 /** Inter (Google Fonts), loaded for Remotion + preview overlay. */
