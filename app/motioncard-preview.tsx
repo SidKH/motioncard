@@ -86,7 +86,7 @@ function MotioncardTitleOverlay({
         autoComplete="off"
         aria-label="On-screen text"
         rows={1}
-        className="pointer-events-auto min-h-0 w-full max-w-full resize-none overflow-y-auto border-0 bg-transparent text-center outline-none ring-0 placeholder:text-muted-foreground/40 focus:ring-0"
+        className="pointer-events-auto min-h-0 w-full max-w-full resize-none overflow-y-auto border-0 bg-transparent text-center outline-none ring-0 focus:ring-0"
         style={{
           color: TITLE_COLOR,
           caretColor: TITLE_COLOR,
@@ -101,7 +101,6 @@ function MotioncardTitleOverlay({
           wordBreak: "break-word",
           textShadow: TITLE_TEXT_SHADOW,
         }}
-        placeholder="Type here…"
       />
     </div>
   );
