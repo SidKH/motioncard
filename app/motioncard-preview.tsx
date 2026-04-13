@@ -1,7 +1,8 @@
 "use client";
 
 import { Player } from "@remotion/player";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { useElementSize } from "@/hooks/use-element-size";
 import {
   POC_COMPOSITION,
   PocComposition,
@@ -33,26 +34,9 @@ export function MotioncardPreview({
 }: MotioncardPreviewProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [displaySize, setDisplaySize] = useState({ w: 0, h: 0 });
+  const { width: w, height: h } = useElementSize(wrapRef);
 
-  useEffect(() => {
-    const el = wrapRef.current;
-    if (!el) return;
-
-    const measure = () => {
-      const r = el.getBoundingClientRect();
-      setDisplaySize({ w: r.width, h: r.height });
-    };
-
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
-
-  const measured = displaySize.w > 0 && displaySize.h > 0;
-  const w = displaySize.w;
-  const h = displaySize.h;
+  const measured = w > 0 && h > 0;
   const pad = measured ? getPocTitlePaddingPx(w, h) : { x: 0, y: 0 };
   const fontPx = measured
     ? getPocTitleOverlayFontSizePx(w, fontSizeProgress)
