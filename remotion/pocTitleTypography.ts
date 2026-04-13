@@ -4,6 +4,9 @@ export const POC_TITLE_FRAME_WIDTH = 1920;
 /** Tailwind `zinc-50` — must match title in PocComposition */
 export const POC_TITLE_COLOR = "#fafafa";
 
+/** Soft halo for legibility on busy backgrounds (Player + rendered output). */
+export const POC_TITLE_TEXT_SHADOW = "rgba(0, 0, 0, 0.5) 0px 0px 16px";
+
 export const POC_TITLE_FONT_FAMILY = "system-ui, sans-serif";
 export const POC_TITLE_FONT_WEIGHT = 400;
 export const POC_TITLE_LETTER_SPACING = "-0.02em";

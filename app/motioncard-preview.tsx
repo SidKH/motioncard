@@ -15,6 +15,7 @@ import {
   POC_TITLE_FONT_WEIGHT,
   POC_TITLE_LETTER_SPACING,
   POC_TITLE_LINE_HEIGHT,
+  POC_TITLE_TEXT_SHADOW,
 } from "@/remotion/pocTitleTypography";
 
 type MotioncardPreviewProps = {
@@ -129,6 +130,7 @@ export function MotioncardPreview({
               whiteSpace: "pre-wrap",
               overflowWrap: "break-word",
               wordBreak: "break-word",
+              textShadow: POC_TITLE_TEXT_SHADOW,
             }}
             placeholder="Type here…"
           />

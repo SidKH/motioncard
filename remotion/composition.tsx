@@ -9,6 +9,7 @@ import {
   POC_TITLE_FONT_WEIGHT,
   POC_TITLE_LETTER_SPACING,
   POC_TITLE_LINE_HEIGHT,
+  POC_TITLE_TEXT_SHADOW,
 } from "@/remotion/pocTitleTypography";
 
 /** Shared metadata for Player + renderMediaOnWeb */
@@ -89,6 +90,7 @@ export function PocComposition({
               maxWidth: "100%",
               maxHeight: "100%",
               overflow: "hidden",
+              textShadow: POC_TITLE_TEXT_SHADOW,
             }}
           >
             {text}
