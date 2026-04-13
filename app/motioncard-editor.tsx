@@ -135,6 +135,7 @@ export function MotioncardEditor() {
                     <SelectContent>
                       <SelectItem value="silk">Silk</SelectItem>
                       <SelectItem value="smoke">Smoke</SelectItem>
+                      <SelectItem value="rays">Rays</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

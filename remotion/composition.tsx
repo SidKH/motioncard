@@ -1,4 +1,5 @@
 import { AbsoluteFill, useVideoConfig } from "remotion";
+import { LightRays } from "@/remotion/LightRays";
 import { TitleStripSilk } from "@/remotion/TitleStripSilk";
 import { SmokePillar } from "@/remotion/SmokePillar";
 import {
@@ -22,7 +23,7 @@ export const POC_COMPOSITION = {
   durationInFrames: 300,
 } as const;
 
-export type PocBackgroundId = "silk" | "smoke";
+export type PocBackgroundId = "silk" | "smoke" | "rays";
 
 export type PocCompositionProps = {
   readonly text: string;
@@ -59,6 +60,8 @@ export function PocComposition({
     >
       {background === "smoke" ? (
         <SmokePillar widthPx={width} heightPx={height} />
+      ) : background === "rays" ? (
+        <LightRays widthPx={width} heightPx={height} />
       ) : (
         <TitleStripSilk gridCellPx={72} widthPx={width} heightPx={height} />
       )}
