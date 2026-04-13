@@ -1,7 +1,7 @@
 import type { SVGProps } from "react";
 
 /** Square + 45° diagonal; lower-left triangle filled zinc-600. */
-export function MotionCardLogo(props: SVGProps<SVGSVGElement>) {
+export function Logo(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       viewBox="0 0 24 24"
