@@ -14,10 +14,10 @@ import {
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import {
-  POC_COMPOSITION,
-  POC_COMPOSITION_DEFAULT_PROPS,
-  PocComposition,
-  type PocBackgroundId,
+  COMPOSITION,
+  COMPOSITION_DEFAULT_PROPS,
+  Composition,
+  type BackgroundId,
 } from "@/remotion/composition";
 import { cn } from "@/lib/utils";
 
@@ -27,11 +27,11 @@ function formatMegabytes(bytes: number): string {
 }
 
 export function MotioncardEditor() {
-  const [text, setText] = useState(POC_COMPOSITION_DEFAULT_PROPS.text);
+  const [text, setText] = useState(COMPOSITION_DEFAULT_PROPS.text);
   const [renderProgress, setRenderProgress] = useState<number | null>(null);
   const [fontSizeProgress, setFontSizeProgress] = useState(50);
-  const [background, setBackground] = useState<PocBackgroundId>(
-    POC_COMPOSITION_DEFAULT_PROPS.background ?? "silk",
+  const [background, setBackground] = useState<BackgroundId>(
+    COMPOSITION_DEFAULT_PROPS.background ?? "silk",
   );
   const [error, setError] = useState<string | null>(null);
   const [isRendering, setIsRendering] = useState(false);
@@ -70,13 +70,13 @@ export function MotioncardEditor() {
     try {
       const { getBlob } = await renderMediaOnWeb({
         composition: {
-          id: POC_COMPOSITION.id,
-          component: PocComposition,
-          defaultProps: POC_COMPOSITION_DEFAULT_PROPS,
-          durationInFrames: POC_COMPOSITION.durationInFrames,
-          fps: POC_COMPOSITION.fps,
-          width: POC_COMPOSITION.width,
-          height: POC_COMPOSITION.height,
+          id: COMPOSITION.id,
+          component: Composition,
+          defaultProps: COMPOSITION_DEFAULT_PROPS,
+          durationInFrames: COMPOSITION.durationInFrames,
+          fps: COMPOSITION.fps,
+          width: COMPOSITION.width,
+          height: COMPOSITION.height,
           calculateMetadata: null,
         },
         inputProps: { text, fontSizeProgress, background },
@@ -122,7 +122,7 @@ export function MotioncardEditor() {
                   <Select
                     value={background}
                     onValueChange={(v) =>
-                      setBackground(v as PocBackgroundId)
+                      setBackground(v as BackgroundId)
                     }
                   >
                     <SelectTrigger

@@ -3,19 +3,19 @@ import { LightRays } from "@/remotion/LightRays";
 import { TitleStripSilk } from "@/remotion/TitleStripSilk";
 import { SmokePillar } from "@/remotion/SmokePillar";
 import {
-  getPocTitleFontSizePx,
-  getPocTitlePaddingPx,
-  POC_TITLE_COLOR,
-  POC_TITLE_FONT_FAMILY,
-  POC_TITLE_FONT_WEIGHT,
-  POC_TITLE_LETTER_SPACING,
-  POC_TITLE_LINE_HEIGHT,
-  POC_TITLE_TEXT_SHADOW,
-} from "@/remotion/pocTitleTypography";
+  getTitleFontSizePx,
+  getTitlePaddingPx,
+  TITLE_COLOR,
+  TITLE_FONT_FAMILY,
+  TITLE_FONT_WEIGHT,
+  TITLE_LETTER_SPACING,
+  TITLE_LINE_HEIGHT,
+  TITLE_TEXT_SHADOW,
+} from "@/remotion/typography";
 
 /** Shared metadata for Player + renderMediaOnWeb */
-export const POC_COMPOSITION = {
-  id: "poc-composition",
+export const COMPOSITION = {
+  id: "motioncard-composition",
   width: 1920,
   height: 1080,
   fps: 30,
@@ -23,32 +23,32 @@ export const POC_COMPOSITION = {
   durationInFrames: 300,
 } as const;
 
-export type PocBackgroundId = "silk" | "smoke" | "rays";
+export type BackgroundId = "silk" | "smoke" | "rays";
 
-export type PocCompositionProps = {
+export type CompositionProps = {
   readonly text: string;
-  /** 0–100; 50 = default scale (see `getPocTitleFontSizeMultiplier`). */
+  /** 0–100; 50 = default scale (see `getTitleFontSizeMultiplier`). */
   readonly fontSizeProgress?: number;
   /** Animated background behind the title. */
-  readonly background?: PocBackgroundId;
+  readonly background?: BackgroundId;
   /** Preview-only: skip drawing title when an HTML overlay shows the same text. */
   readonly hideTitle?: boolean;
 };
 
-export const POC_COMPOSITION_DEFAULT_PROPS: PocCompositionProps = {
+export const COMPOSITION_DEFAULT_PROPS: CompositionProps = {
   text: "Hello world",
   fontSizeProgress: 50,
   background: "silk",
 };
 
-export function PocComposition({
+export function Composition({
   text,
   fontSizeProgress = 50,
   background = "silk",
   hideTitle,
-}: PocCompositionProps) {
+}: CompositionProps) {
   const { width, height } = useVideoConfig();
-  const pad = getPocTitlePaddingPx(width, height);
+  const pad = getTitlePaddingPx(width, height);
 
   return (
     <AbsoluteFill
@@ -80,12 +80,12 @@ export function PocComposition({
         >
           <div
             style={{
-              color: POC_TITLE_COLOR,
-              fontFamily: POC_TITLE_FONT_FAMILY,
-              fontSize: getPocTitleFontSizePx(width, fontSizeProgress),
-              fontWeight: POC_TITLE_FONT_WEIGHT,
-              letterSpacing: POC_TITLE_LETTER_SPACING,
-              lineHeight: POC_TITLE_LINE_HEIGHT,
+              color: TITLE_COLOR,
+              fontFamily: TITLE_FONT_FAMILY,
+              fontSize: getTitleFontSizePx(width, fontSizeProgress),
+              fontWeight: TITLE_FONT_WEIGHT,
+              letterSpacing: TITLE_LETTER_SPACING,
+              lineHeight: TITLE_LINE_HEIGHT,
               textAlign: "center",
               whiteSpace: "pre-wrap",
               wordBreak: "break-word",
@@ -93,7 +93,7 @@ export function PocComposition({
               maxWidth: "100%",
               maxHeight: "100%",
               overflow: "hidden",
-              textShadow: POC_TITLE_TEXT_SHADOW,
+              textShadow: TITLE_TEXT_SHADOW,
             }}
           >
             {text}

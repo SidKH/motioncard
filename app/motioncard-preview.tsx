@@ -4,26 +4,26 @@ import { Player } from "@remotion/player";
 import { useEffect, useRef } from "react";
 import { useElementSize } from "@/hooks/use-element-size";
 import {
-  POC_COMPOSITION,
-  PocComposition,
-  type PocBackgroundId,
+  COMPOSITION,
+  Composition,
+  type BackgroundId,
 } from "@/remotion/composition";
 import {
-  getPocTitleOverlayFontSizePx,
-  getPocTitlePaddingPx,
-  POC_TITLE_COLOR,
-  POC_TITLE_FONT_FAMILY,
-  POC_TITLE_FONT_WEIGHT,
-  POC_TITLE_LETTER_SPACING,
-  POC_TITLE_LINE_HEIGHT,
-  POC_TITLE_TEXT_SHADOW,
-} from "@/remotion/pocTitleTypography";
+  getTitleOverlayFontSizePx,
+  getTitlePaddingPx,
+  TITLE_COLOR,
+  TITLE_FONT_FAMILY,
+  TITLE_FONT_WEIGHT,
+  TITLE_LETTER_SPACING,
+  TITLE_LINE_HEIGHT,
+  TITLE_TEXT_SHADOW,
+} from "@/remotion/typography";
 
 type MotioncardPreviewProps = {
   readonly text: string;
   readonly onTextChange: (value: string) => void;
   readonly fontSizeProgress: number;
-  readonly background: PocBackgroundId;
+  readonly background: BackgroundId;
 };
 
 type MotioncardTitleOverlayProps = {
@@ -34,7 +34,7 @@ type MotioncardTitleOverlayProps = {
   readonly maxTextareaHeight: number;
 };
 
-/** DOM title editor stacked on the Player; `PocComposition` uses `hideTitle` so text is not drawn twice. */
+/** DOM title editor stacked on the Player; `Composition` uses `hideTitle` so text is not drawn twice. */
 function MotioncardTitleOverlay({
   text,
   onTextChange,
@@ -88,18 +88,18 @@ function MotioncardTitleOverlay({
         rows={1}
         className="pointer-events-auto min-h-0 w-full max-w-full resize-none overflow-y-auto border-0 bg-transparent text-center outline-none ring-0 placeholder:text-muted-foreground/40 focus:ring-0"
         style={{
-          color: POC_TITLE_COLOR,
-          caretColor: POC_TITLE_COLOR,
-          fontFamily: POC_TITLE_FONT_FAMILY,
+          color: TITLE_COLOR,
+          caretColor: TITLE_COLOR,
+          fontFamily: TITLE_FONT_FAMILY,
           fontSize: fontPx,
-          fontWeight: POC_TITLE_FONT_WEIGHT,
-          letterSpacing: POC_TITLE_LETTER_SPACING,
-          lineHeight: POC_TITLE_LINE_HEIGHT,
+          fontWeight: TITLE_FONT_WEIGHT,
+          letterSpacing: TITLE_LETTER_SPACING,
+          lineHeight: TITLE_LINE_HEIGHT,
           maxHeight: maxTextareaHeight,
           whiteSpace: "pre-wrap",
           overflowWrap: "break-word",
           wordBreak: "break-word",
-          textShadow: POC_TITLE_TEXT_SHADOW,
+          textShadow: TITLE_TEXT_SHADOW,
         }}
         placeholder="Type here…"
       />
@@ -117,9 +117,9 @@ export function MotioncardPreview({
   const { width: w, height: h } = useElementSize(wrapRef);
 
   const measured = w > 0 && h > 0;
-  const pad = measured ? getPocTitlePaddingPx(w, h) : { x: 0, y: 0 };
+  const pad = measured ? getTitlePaddingPx(w, h) : { x: 0, y: 0 };
   const fontPx = measured
-    ? getPocTitleOverlayFontSizePx(w, fontSizeProgress)
+    ? getTitleOverlayFontSizePx(w, fontSizeProgress)
     : 0;
   const maxTextareaHeight = measured ? Math.max(0, h - 2 * pad.y) : 0;
 
@@ -131,12 +131,12 @@ export function MotioncardPreview({
       <Player
         // New background: remount so Player/composition state does not mix across assets.
         key={background}
-        component={PocComposition}
+        component={Composition}
         inputProps={{ text, hideTitle: true, fontSizeProgress, background }}
-        durationInFrames={POC_COMPOSITION.durationInFrames}
-        fps={POC_COMPOSITION.fps}
-        compositionWidth={POC_COMPOSITION.width}
-        compositionHeight={POC_COMPOSITION.height}
+        durationInFrames={COMPOSITION.durationInFrames}
+        fps={COMPOSITION.fps}
+        compositionWidth={COMPOSITION.width}
+        compositionHeight={COMPOSITION.height}
         loop
         autoPlay
         acknowledgeRemotionLicense
