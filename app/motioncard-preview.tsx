@@ -2,7 +2,7 @@
 
 import { Player } from "@remotion/player";
 import { useEffect, useRef } from "react";
-import { useElementSize } from "@/hooks/use-element-size";
+import { useElementSize } from "@/lib/hooks/use-element-size";
 import {
   COMPOSITION,
   Composition,
