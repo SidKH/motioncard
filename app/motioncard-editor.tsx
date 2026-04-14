@@ -85,7 +85,8 @@ export function MotioncardEditor() {
         },
         // Same props as MotioncardPreview's Player so the file matches the canvas.
         inputProps: { text, fontSizeProgress, background },
-        scale: 0.7,
+        // Full composition resolution keeps text edges sharp; values below 1 trade quality for speed/size.
+        scale: 1,
         onProgress: ({ progress: p }) => setRenderProgress(p),
       });
       const blob = await getBlob();
