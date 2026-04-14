@@ -1,4 +1,5 @@
 import { AbsoluteFill, useVideoConfig } from "remotion";
+import { FRAME_HEIGHT, FRAME_WIDTH } from "@/remotion/constants";
 import { Rays } from "@/remotion/backgrounds/Rays";
 import { Silk } from "@/remotion/backgrounds/Silk";
 import { Smoke } from "@/remotion/backgrounds/Smoke";
@@ -16,8 +17,8 @@ import {
 /** Shared metadata for Player + renderMediaOnWeb */
 export const COMPOSITION = {
   id: "motioncard-composition",
-  width: 1920,
-  height: 1080,
+  width: FRAME_WIDTH,
+  height: FRAME_HEIGHT,
   fps: 30,
   /** Silk uses `phase = 2π·frame/duration` → seamless loop for any duration ≥ 1. */
   durationInFrames: 300,
