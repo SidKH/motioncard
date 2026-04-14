@@ -1,4 +1,9 @@
 <!-- TEXT_SECTION:header:START -->
+<p align="center">
+  <a href="https://github.com/SidKH/motioncard" target="_blank" rel="noopener noreferrer">
+    <img width="1024" src="public/readme-hero.png" alt="motioncard">
+  </a>
+</p>
 <h1 align="center">
   motioncard
 </h1>
