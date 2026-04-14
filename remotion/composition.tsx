@@ -24,6 +24,15 @@ export const RENDER_WEB_VIDEO_BITRATE = "very-low" as const;
 
 export type BackgroundId = "silk" | "smoke" | "rays";
 
+export const BACKGROUND_OPTIONS: readonly {
+  readonly value: BackgroundId;
+  readonly label: string;
+}[] = [
+  { value: "silk", label: "Silk" },
+  { value: "smoke", label: "Smoke" },
+  { value: "rays", label: "Rays" },
+];
+
 export type CompositionProps = {
   readonly text: string;
   // 0–100; 50 matches the default in getTitleFontSizeMultiplier.
