@@ -14,9 +14,9 @@ export const COMPOSITION = {
   id: "motioncard-composition",
   width: FRAME_WIDTH,
   height: FRAME_HEIGHT,
-  fps: 30,
+  fps: 60,
   /** Silk uses `phase = 2π·frame/duration` → seamless loop for any duration ≥ 1. */
-  durationInFrames: 300,
+  durationInFrames: 600,
 } as const;
 
 export type BackgroundId = "silk" | "smoke" | "rays";

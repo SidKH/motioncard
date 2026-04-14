@@ -85,6 +85,7 @@ export function MotioncardEditor() {
         },
         // Same props as MotioncardPreview's Player so the file matches the canvas.
         inputProps: { text, fontSizeProgress, background },
+        scale: 0.7,
         onProgress: ({ progress: p }) => setRenderProgress(p),
       });
       const blob = await getBlob();
