@@ -9,13 +9,13 @@ import {
   TITLE_TEXT_STYLE,
 } from "@/remotion/typography";
 
-/** Shared metadata for Player + renderMediaOnWeb */
+// Kept in sync with Player and renderMediaOnWeb (shared duration, dimensions, fps).
 export const COMPOSITION = {
   id: "motioncard-composition",
   width: FRAME_WIDTH,
   height: FRAME_HEIGHT,
   fps: 60,
-  /** Silk uses `phase = 2π·frame/duration` → seamless loop for any duration ≥ 1. */
+  // Backgrounds read this via useVideoConfig; phase maps first/last frame so each loop is seamless.
   durationInFrames: 600,
 } as const;
 
@@ -23,11 +23,9 @@ export type BackgroundId = "silk" | "smoke" | "rays";
 
 export type CompositionProps = {
   readonly text: string;
-  /** 0–100; 50 = default scale (see `getTitleFontSizeMultiplier`). */
+  // 0–100; 50 matches the default in getTitleFontSizeMultiplier.
   readonly fontSizeProgress?: number;
-  /** Animated background behind the title. */
   readonly background?: BackgroundId;
-  /** Preview-only: skip drawing title when an HTML overlay shows the same text. */
   readonly hideTitle?: boolean;
 };
 
