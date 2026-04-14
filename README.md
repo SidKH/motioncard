@@ -1,6 +1,6 @@
 <!-- TEXT_SECTION:header:START -->
 <p align="center">
-  <a href="https://github.com/SidKH/motioncard" target="_blank" rel="noopener noreferrer">
+  <a href="https://www.motioncard.app/" target="_blank" rel="noopener noreferrer">
     <img width="1024" src="public/readme-hero.jpg" alt="motioncard">
   </a>
 </p>
@@ -17,7 +17,7 @@
 
 ## About
 
-This repository contains the source code for **motioncard**, a web app built with [Next.js](https://nextjs.org/) and [Remotion](https://www.remotion.dev/).
+This repository contains the source code for **[motioncard](https://www.motioncard.app/)**, a web app built with [Next.js](https://nextjs.org/) and [Remotion](https://www.remotion.dev/).
 
 ## Setup
 
