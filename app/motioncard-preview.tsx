@@ -1,8 +1,9 @@
 "use client";
 
 import { Player } from "@remotion/player";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useElementSize } from "@/lib/hooks/use-element-size";
+import { useMountFocusCaretEnd } from "@/lib/hooks/use-mount-focus-caret-end";
 import { useTextareaAutoHeight } from "@/lib/hooks/use-textarea-auto-height";
 import {
   COMPOSITION,
@@ -40,18 +41,7 @@ function MotioncardTitleOverlay({
 }: MotioncardTitleOverlayProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  useEffect(() => {
-    const ta = textareaRef.current;
-    if (!ta) return;
-    ta.focus();
-    const placeCaretAtEnd = () => {
-      const len = ta.value.length;
-      ta.setSelectionRange(len, len);
-    };
-    placeCaretAtEnd();
-    // Selection can still be wrong immediately after focus; one rAF defers until after layout.
-    requestAnimationFrame(placeCaretAtEnd);
-  }, []);
+  useMountFocusCaretEnd(textareaRef);
 
   useTextareaAutoHeight(textareaRef, {
     text,
