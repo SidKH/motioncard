@@ -15,6 +15,10 @@ export const TITLE_TEXT_STYLE = {
   letterSpacing: "-0.02em",
   lineHeight: 1.25,
   textShadow: "rgba(0, 0, 0, 0.5) 0px 0px 16px",
+  textAlign: "center",
+  whiteSpace: "pre-wrap",
+  wordBreak: "break-word",
+  overflowWrap: "break-word",
 } as const satisfies CSSProperties;
 
 const TITLE_FONT_AT_REFERENCE_PX = 112;

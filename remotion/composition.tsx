@@ -76,10 +76,6 @@ export function Composition({
             style={{
               ...TITLE_TEXT_STYLE,
               fontSize: getTitleFontSizePx(width, fontSizeProgress),
-              textAlign: "center",
-              whiteSpace: "pre-wrap",
-              wordBreak: "break-word",
-              overflowWrap: "break-word",
               maxWidth: "100%",
               maxHeight: "100%",
               overflow: "hidden",
