@@ -3,6 +3,7 @@
 import { Player } from "@remotion/player";
 import { useEffect, useRef } from "react";
 import { useElementSize } from "@/lib/hooks/use-element-size";
+import { useTextareaAutoHeight } from "@/lib/hooks/use-textarea-auto-height";
 import {
   COMPOSITION,
   Composition,
@@ -52,14 +53,11 @@ function MotioncardTitleOverlay({
     requestAnimationFrame(placeCaretAtEnd);
   }, []);
 
-  useEffect(() => {
-    const ta = textareaRef.current;
-    if (!ta || maxTextareaHeight <= 0) return;
-    // Reset height so scrollHeight reflects full content; then clamp to the padded region.
-    ta.style.height = "auto";
-    const next = Math.min(ta.scrollHeight, maxTextareaHeight);
-    ta.style.height = `${next}px`;
-  }, [text, maxTextareaHeight, fontPx]);
+  useTextareaAutoHeight(textareaRef, {
+    text,
+    maxTextareaHeight,
+    remeasureKey: fontPx,
+  });
 
   return (
     <div
