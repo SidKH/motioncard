@@ -1,19 +1,21 @@
+import type { CSSProperties } from "react";
 import { loadFont } from "@remotion/google-fonts/Inter";
 import { FRAME_WIDTH } from "@/remotion/constants";
-
-export const TITLE_COLOR = "#fafafa";
-
-/** Legibility on busy backgrounds in both Player and final render. */
-export const TITLE_TEXT_SHADOW = "rgba(0, 0, 0, 0.5) 0px 0px 16px";
 
 const { fontFamily: titleFontFamily } = loadFont("normal", {
   weights: ["400"],
   subsets: ["latin", "cyrillic", "cyrillic-ext"],
 });
 
-export const TITLE_FONT_FAMILY = titleFontFamily;
-export const TITLE_FONT_WEIGHT = 400;
-export const TITLE_LETTER_SPACING = "-0.02em";
+/** Shared by `Composition` and the preview overlay so on-canvas and DOM text match. */
+export const TITLE_TEXT_STYLE = {
+  color: "#fafafa",
+  fontFamily: titleFontFamily,
+  fontWeight: 400,
+  letterSpacing: "-0.02em",
+  lineHeight: 1.25,
+  textShadow: "rgba(0, 0, 0, 0.5) 0px 0px 16px",
+} as const satisfies CSSProperties;
 
 const TITLE_FONT_AT_REFERENCE_PX = 112;
 
@@ -61,6 +63,3 @@ export function getTitlePaddingPx(
     y: Math.round(frameHeight * TITLE_PADDING_Y_RATIO),
   };
 }
-
-/** Same as in-frame title so wrapped lines match between overlay and render. */
-export const TITLE_LINE_HEIGHT = 1.25;

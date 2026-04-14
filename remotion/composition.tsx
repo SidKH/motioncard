@@ -6,12 +6,7 @@ import { Smoke } from "@/remotion/backgrounds/Smoke";
 import {
   getTitleFontSizePx,
   getTitlePaddingPx,
-  TITLE_COLOR,
-  TITLE_FONT_FAMILY,
-  TITLE_FONT_WEIGHT,
-  TITLE_LETTER_SPACING,
-  TITLE_LINE_HEIGHT,
-  TITLE_TEXT_SHADOW,
+  TITLE_TEXT_STYLE,
 } from "@/remotion/typography";
 
 /** Shared metadata for Player + renderMediaOnWeb */
@@ -81,12 +76,8 @@ export function Composition({
         >
           <div
             style={{
-              color: TITLE_COLOR,
-              fontFamily: TITLE_FONT_FAMILY,
+              ...TITLE_TEXT_STYLE,
               fontSize: getTitleFontSizePx(width, fontSizeProgress),
-              fontWeight: TITLE_FONT_WEIGHT,
-              letterSpacing: TITLE_LETTER_SPACING,
-              lineHeight: TITLE_LINE_HEIGHT,
               textAlign: "center",
               whiteSpace: "pre-wrap",
               wordBreak: "break-word",
@@ -94,7 +85,6 @@ export function Composition({
               maxWidth: "100%",
               maxHeight: "100%",
               overflow: "hidden",
-              textShadow: TITLE_TEXT_SHADOW,
             }}
           >
             {text}

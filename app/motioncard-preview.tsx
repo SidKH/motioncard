@@ -11,12 +11,7 @@ import {
 import {
   getTitleOverlayFontSizePx,
   getTitlePaddingPx,
-  TITLE_COLOR,
-  TITLE_FONT_FAMILY,
-  TITLE_FONT_WEIGHT,
-  TITLE_LETTER_SPACING,
-  TITLE_LINE_HEIGHT,
-  TITLE_TEXT_SHADOW,
+  TITLE_TEXT_STYLE,
 } from "@/remotion/typography";
 
 type MotioncardPreviewProps = {
@@ -88,18 +83,13 @@ function MotioncardTitleOverlay({
         rows={1}
         className="pointer-events-auto min-h-0 w-full max-w-full resize-none overflow-y-auto border-0 bg-transparent text-center outline-none ring-0 focus:ring-0"
         style={{
-          color: TITLE_COLOR,
-          caretColor: TITLE_COLOR,
-          fontFamily: TITLE_FONT_FAMILY,
+          ...TITLE_TEXT_STYLE,
+          caretColor: TITLE_TEXT_STYLE.color,
           fontSize: fontPx,
-          fontWeight: TITLE_FONT_WEIGHT,
-          letterSpacing: TITLE_LETTER_SPACING,
-          lineHeight: TITLE_LINE_HEIGHT,
           maxHeight: maxTextareaHeight,
           whiteSpace: "pre-wrap",
           overflowWrap: "break-word",
           wordBreak: "break-word",
-          textShadow: TITLE_TEXT_SHADOW,
         }}
       />
     </div>
