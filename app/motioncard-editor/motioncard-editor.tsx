@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { MotioncardPreview } from "@/app/motioncard-preview";
-import { BackgroundSelect } from "@/app/motioncard-editor/background-select";
-import { FontSizeSlider } from "@/app/motioncard-editor/font-size-slider";
-import { VideoExportActions } from "@/app/motioncard-editor/video-export-actions";
+import { BackgroundSelect } from "./background-select";
+import { FontSizeSlider } from "./font-size-slider";
+import { VideoExportActions } from "./video-export-actions";
+import { MotioncardPreview } from "./motioncard-preview";
 import { COMPOSITION_DEFAULT_PROPS, type BackgroundId } from "@/remotion/composition";
 import { useMotioncardWebRender } from "@/lib/hooks/use-motioncard-web-render";
 

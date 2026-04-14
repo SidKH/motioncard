@@ -1,6 +1,6 @@
 import { GithubLogo } from "@/components/github-logo";
 import { Logo } from "@/components/logo";
-import { MotioncardEditor } from "./motioncard-editor";
+import { MotioncardEditor } from "@/app/motioncard-editor/motioncard-editor";
 
 const GITHUB_REPO_URL = "https://github.com/SidKH/motioncard";
 
