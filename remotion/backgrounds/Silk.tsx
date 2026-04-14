@@ -284,7 +284,7 @@ function drawSilkCpu(
  * Animated silk shader behind intro title strips — same math as a R3F `ShaderMaterial`
  * plane, driven deterministically by composition frame (no `requestAnimationFrame`).
  */
-export function TitleStripSilk({
+export function Silk({
   gridCellPx,
   widthPx,
   heightPx,

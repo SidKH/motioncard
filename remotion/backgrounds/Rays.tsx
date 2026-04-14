@@ -17,7 +17,7 @@ const RAYS_INTENSITY = 0.72;
 
 const TWO_PI = 2 * Math.PI;
 
-export type LightRaysOrigin =
+export type RaysOrigin =
   | "top-left"
   | "top-center"
   | "top-right"
@@ -28,7 +28,7 @@ export type LightRaysOrigin =
   | "bottom-right";
 
 function getAnchorAndDir(
-  origin: LightRaysOrigin,
+  origin: RaysOrigin,
   w: number,
   h: number,
 ): { anchor: [number, number]; dir: [number, number] } {
@@ -55,7 +55,7 @@ function getAnchorAndDir(
 
 /**
  * Phase in [0, 2π] over the composition so the last frame matches the first when looped.
- * Use only `sin(uPhase * k)` / `cos(uPhase * k)` with **integer** k in the shader (see SmokePillar).
+ * Use only `sin(uPhase * k)` / `cos(uPhase * k)` with **integer** k in the shader (see Smoke).
  */
 function raysPhase(frame: number, durationInFrames: number): number {
   const n = Math.max(1, durationInFrames);
@@ -310,7 +310,7 @@ function drawRaysCpuFallback(
   ctx.fillRect(0, 0, bw, bh);
 }
 
-export function LightRays({
+export function Rays({
   widthPx,
   heightPx,
   visibleOpacity = 1,
@@ -328,7 +328,7 @@ export function LightRays({
   readonly widthPx: number;
   readonly heightPx: number;
   readonly visibleOpacity?: number;
-  readonly raysOrigin?: LightRaysOrigin;
+  readonly raysOrigin?: RaysOrigin;
   readonly raysSpeed?: number;
   readonly lightSpread?: number;
   readonly rayLength?: number;

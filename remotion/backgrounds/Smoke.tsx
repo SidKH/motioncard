@@ -321,7 +321,7 @@ const WAVE_ANGLE = 0.4;
 /** Extra swirl so the column reads less like a rigid beam and more like drifting smoke. */
 const WAVE_ANGLE_WOBBLE = 0.22;
 
-export function SmokePillar({
+export function Smoke({
   widthPx,
   heightPx,
   visibleOpacity = 1,

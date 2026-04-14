@@ -1,7 +1,7 @@
 import { AbsoluteFill, useVideoConfig } from "remotion";
-import { LightRays } from "@/remotion/LightRays";
-import { TitleStripSilk } from "@/remotion/TitleStripSilk";
-import { SmokePillar } from "@/remotion/SmokePillar";
+import { Rays } from "@/remotion/backgrounds/Rays";
+import { Silk } from "@/remotion/backgrounds/Silk";
+import { Smoke } from "@/remotion/backgrounds/Smoke";
 import {
   getTitleFontSizePx,
   getTitlePaddingPx,
@@ -59,11 +59,11 @@ export function Composition({
       }}
     >
       {background === "smoke" ? (
-        <SmokePillar widthPx={width} heightPx={height} />
+        <Smoke widthPx={width} heightPx={height} />
       ) : background === "rays" ? (
-        <LightRays widthPx={width} heightPx={height} />
+        <Rays widthPx={width} heightPx={height} />
       ) : (
-        <TitleStripSilk gridCellPx={72} widthPx={width} heightPx={height} />
+        <Silk gridCellPx={72} widthPx={width} heightPx={height} />
       )}
       {!hideTitle && (
         <div
