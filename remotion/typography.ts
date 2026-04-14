@@ -20,7 +20,6 @@ export const TITLE_FONT_WEIGHT = 400;
 export const TITLE_LETTER_SPACING = "-0.02em";
 
 const TITLE_FONT_AT_REFERENCE_PX = 112;
-const TITLE_FONT_MIN_PX = 56;
 
 /** Slider 0–100: 0.5× … 1.0× … 1.5× (50 = default). */
 export function getTitleFontSizeMultiplier(progress0to100: number): number {
@@ -28,10 +27,7 @@ export function getTitleFontSizeMultiplier(progress0to100: number): number {
   return 0.5 + t;
 }
 
-/**
- * Title size inside the Remotion frame (composition coordinates).
- * Uses a minimum so tiny frame widths stay readable in templates.
- */
+/** Title size inside the Remotion frame (composition coordinates). */
 export function getTitleFontSizePx(
   frameWidth: number,
   fontSizeProgress = 50,
@@ -39,10 +35,7 @@ export function getTitleFontSizePx(
   const base = Math.round(
     (frameWidth * TITLE_FONT_AT_REFERENCE_PX) / TITLE_FRAME_WIDTH,
   );
-  const scaled = Math.round(
-    base * getTitleFontSizeMultiplier(fontSizeProgress),
-  );
-  return Math.max(TITLE_FONT_MIN_PX, scaled);
+  return Math.round(base * getTitleFontSizeMultiplier(fontSizeProgress));
 }
 
 /**
