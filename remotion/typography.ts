@@ -19,6 +19,9 @@ export const TITLE_TEXT_STYLE = {
   whiteSpace: "pre-wrap",
   wordBreak: "break-word",
   overflowWrap: "break-word",
+  WebkitFontSmoothing: "antialiased",
+  MozOsxFontSmoothing: "grayscale",
+  textRendering: "optimizeLegibility",
 } as const satisfies CSSProperties;
 
 const TITLE_FONT_AT_REFERENCE_PX = 112;
