@@ -19,6 +19,9 @@ export const COMPOSITION = {
   durationInFrames: 600,
 } as const;
 
+// renderMediaOnWeb defaults to "medium"; lower values shrink exported MP4s.
+export const RENDER_WEB_VIDEO_BITRATE = "very-low" as const;
+
 export type BackgroundId = "silk" | "smoke" | "rays";
 
 export type CompositionProps = {

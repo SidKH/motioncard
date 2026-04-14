@@ -17,6 +17,7 @@ import {
   COMPOSITION,
   COMPOSITION_DEFAULT_PROPS,
   Composition,
+  RENDER_WEB_VIDEO_BITRATE,
   type BackgroundId,
 } from "@/remotion/composition";
 import { cn } from "@/lib/utils";
@@ -86,6 +87,8 @@ export function MotioncardEditor() {
         // Same props as MotioncardPreview's Player so the file matches the canvas.
         inputProps: { text, fontSizeProgress, background },
         licenseKey: "free-license",
+        videoBitrate: RENDER_WEB_VIDEO_BITRATE,
+        muted: true,
         // Full composition resolution keeps text edges sharp; values below 1 trade quality for speed/size.
         scale: 1,
         onProgress: ({ progress: p }) => setRenderProgress(p),
