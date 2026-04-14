@@ -85,6 +85,7 @@ export function MotioncardEditor() {
         },
         // Same props as MotioncardPreview's Player so the file matches the canvas.
         inputProps: { text, fontSizeProgress, background },
+        licenseKey: "free-license",
         // Full composition resolution keeps text edges sharp; values below 1 trade quality for speed/size.
         scale: 1,
         onProgress: ({ progress: p }) => setRenderProgress(p),
