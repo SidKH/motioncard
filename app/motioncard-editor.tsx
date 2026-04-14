@@ -20,12 +20,8 @@ import {
   RENDER_WEB_VIDEO_BITRATE,
   type BackgroundId,
 } from "@/remotion/composition";
+import { formatMegabytes } from "@/lib/format-megabytes";
 import { cn } from "@/lib/utils";
-
-function formatMegabytes(bytes: number): string {
-  const mb = bytes / (1024 * 1024);
-  return `${mb >= 1 ? mb.toFixed(1) : mb.toFixed(2)} MB`;
-}
 
 export function MotioncardEditor() {
   const [text, setText] = useState(COMPOSITION_DEFAULT_PROPS.text);
